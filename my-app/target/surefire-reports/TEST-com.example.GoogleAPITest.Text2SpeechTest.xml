@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.example.GoogleAPITest.Text2SpeechTest" time="0.574" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.example.GoogleAPITest.Text2SpeechTest" time="0.618" tests="2" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="22"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -12,7 +12,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="VN"/>
     <property name="sun.boot.library.path" value="/opt/homebrew/Cellar/openjdk/22.0.1/libexec/openjdk.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="/Users/longsei1208/Library/Mobile Documents/com~apple~CloudDocs/UET Journey/Lập trình hướng đối tượng /OOP-BIGPROJECT/my-app/target/surefire/surefirebooter9284325198977493974.jar /Users/longsei1208/Library/Mobile Documents/com~apple~CloudDocs/UET Journey/Lập trình hướng đối tượng /OOP-BIGPROJECT/my-app/target/surefire 2024-07-23T19-07-44_161-jvmRun1 surefire2053398022917928162tmp surefire_013798477924196425123tmp"/>
+    <property name="sun.java.command" value="/Users/longsei1208/Library/Mobile Documents/com~apple~CloudDocs/UET Journey/Lập trình hướng đối tượng /OOP-BIGPROJECT/my-app/target/surefire/surefirebooter5381021542665125904.jar /Users/longsei1208/Library/Mobile Documents/com~apple~CloudDocs/UET Journey/Lập trình hướng đối tượng /OOP-BIGPROJECT/my-app/target/surefire 2024-07-30T10-59-48_380-jvmRun1 surefire15059601937899399488tmp surefire_012402211489262322949tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/Users/longsei1208/Library/Mobile Documents/com~apple~CloudDocs/UET Journey/Lập trình hướng đối tượng /OOP-BIGPROJECT/my-app/target/test-classes:/Users/longsei1208/Library/Mobile Documents/com~apple~CloudDocs/UET Journey/Lập trình hướng đối tượng /OOP-BIGPROJECT/my-app/target/classes:/Users/longsei1208/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.7.2/junit-jupiter-api-5.7.2.jar:/Users/longsei1208/.m2/repository/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar:/Users/longsei1208/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/Users/longsei1208/.m2/repository/org/junit/platform/junit-platform-commons/1.7.2/junit-platform-commons-1.7.2.jar:/Users/longsei1208/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.7.2/junit-jupiter-engine-5.7.2.jar:/Users/longsei1208/.m2/repository/org/junit/platform/junit-platform-engine/1.7.2/junit-platform-engine-1.7.2.jar:/Users/longsei1208/.m2/repository/org/junit/vintage/junit-vintage-engine/5.7.2/junit-vintage-engine-5.7.2.jar:/Users/longsei1208/.m2/repository/junit/junit/4.13/junit-4.13.jar:/Users/longsei1208/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/Users/longsei1208/.m2/repository/javazoom/jlayer/1.0.1/jlayer-1.0.1.jar:/Users/longsei1208/.m2/repository/mysql/mysql-connector-java/8.0.26/mysql-connector-java-8.0.26.jar:/Users/longsei1208/.m2/repository/com/google/protobuf/protobuf-java/3.11.4/protobuf-java-3.11.4.jar:/Users/longsei1208/.m2/repository/org/xerial/sqlite-jdbc/3.36.0.3/sqlite-jdbc-3.36.0.3.jar:"/>
@@ -29,7 +29,7 @@
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="apple.awt.application.name" value="ForkedBooter"/>
-    <property name="surefire.real.class.path" value="/Users/longsei1208/Library/Mobile Documents/com~apple~CloudDocs/UET Journey/Lập trình hướng đối tượng /OOP-BIGPROJECT/my-app/target/surefire/surefirebooter9284325198977493974.jar"/>
+    <property name="surefire.real.class.path" value="/Users/longsei1208/Library/Mobile Documents/com~apple~CloudDocs/UET Journey/Lập trình hướng đối tượng /OOP-BIGPROJECT/my-app/target/surefire/surefirebooter5381021542665125904.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.runtime.version" value="22.0.1"/>
@@ -58,6 +58,6 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="66.0"/>
   </properties>
-  <testcase name="testSaveAudioToFileEn" classname="com.example.GoogleAPITest.Text2SpeechTest" time="0.478"/>
-  <testcase name="testSaveAudioToFileVi" classname="com.example.GoogleAPITest.Text2SpeechTest" time="0.096"/>
+  <testcase name="testSaveAudioToFileEn" classname="com.example.GoogleAPITest.Text2SpeechTest" time="0.526"/>
+  <testcase name="testSaveAudioToFileVi" classname="com.example.GoogleAPITest.Text2SpeechTest" time="0.092"/>
 </testsuite>

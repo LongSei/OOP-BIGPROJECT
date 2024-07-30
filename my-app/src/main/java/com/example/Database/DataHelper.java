@@ -2,6 +2,7 @@ package com.example.Database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataHelper {
     private static final String DATABASE_URL = "jdbc:sqlite:src/main/resources/database.db";
@@ -24,7 +25,7 @@ public class DataHelper {
      * @return A connection to the database
      * @throws RuntimeException If an error occurs while connecting to the database
      */
-    public static Connection getConnection() {
+    public Connection getConnection() {
         try {
             return DriverManager.getConnection(DATABASE_URL);
         } catch (SQLException e) {
@@ -39,7 +40,7 @@ public class DataHelper {
      * @param conn The connection to be closed
      * @throws RuntimeException If an error occurs while closing the connection
      */
-    public static void closeConnection(Connection conn) {
+    public void closeConnection(Connection conn) {
         try {
             if (conn != null) {
                 conn.close();
@@ -55,7 +56,7 @@ public class DataHelper {
      *
      * @throws RuntimeException If an error occurs while creating the tables
      */
-    public static void createTable() {
+    public void createTable() {
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.execute(CREATE_TEXT_TO_SPEECH_REQUESTS_TABLE);
@@ -74,7 +75,7 @@ public class DataHelper {
      * @param values  The list of values
      * @throws RuntimeException If an error occurs while inserting data into the table
      */
-    public static void insertData(String table, ArrayList<String> columns, ArrayList<String> values) {
+    public void insertData(String table, List<String> columns, List<String> values) {
         if (columns.size() != values.size()) {
             throw new IllegalArgumentException("Columns and values size mismatch");
         }
@@ -123,7 +124,7 @@ public class DataHelper {
      * @param values  The list of values
      * @throws RuntimeException If an error occurs while updating data in the table
      */
-    public static void updateData(String table, ArrayList<String> columns, ArrayList<String> values) {
+    public void updateData(String table, List<String> columns, List<String> values) {
         if (columns.size() != values.size()) {
             throw new IllegalArgumentException("Columns and values size mismatch");
         }
@@ -151,7 +152,7 @@ public class DataHelper {
      * @param condition The condition for updating the data
      * @throws RuntimeException If an error occurs while updating data in the table
      */
-    public static void updateData(String table, ArrayList<String> columns, ArrayList<String> values, String condition) {
+    public void updateData(String table, List<String> columns, List<String> values, String condition) {
         if (columns.size() != values.size()) {
             throw new IllegalArgumentException("Columns and values size mismatch");
         }
@@ -176,7 +177,7 @@ public class DataHelper {
      * @param table The name of the table
      * @throws RuntimeException If an error occurs while deleting data from the table
      */
-    public static void deleteData(String table) {
+    public void deleteData(String table) {
         String sql = "DELETE FROM " + table;
 
         try (Connection conn = getConnection();
@@ -195,7 +196,7 @@ public class DataHelper {
      * @param condition The condition for deleting the data
      * @throws RuntimeException If an error occurs while deleting data from the table
      */
-    public static void deleteData(String table, String condition) {
+    public void deleteData(String table, String condition) {
         String sql = "DELETE FROM " + table + " WHERE " + condition;
 
         try (Connection conn = getConnection();
@@ -214,16 +215,21 @@ public class DataHelper {
      * @param columns The list of columns
      * @return The list of data
      */
-    public static ArrayList<ArrayList<String>> queryData(String table, ArrayList<String> columns) {
+    public List<List<String>> queryData(String table, List<String> columns) {
+        if (columns == null) {
+            columns = new ArrayList<>();
+            columns.add("*");
+        }
+
         String sql = "SELECT " + String.join(", ", columns) + " FROM " + table;
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
-            ArrayList<ArrayList<String>> result = new ArrayList<>();
+            List<List<String>> result = new ArrayList<>();
             while (rs.next()) {
-                ArrayList<String> row = new ArrayList<>();
+                List<String> row = new ArrayList<>();
                 for (String column : columns) {
                     row.add(rs.getString(column));
                 }
@@ -245,16 +251,21 @@ public class DataHelper {
      * @return The list of data
      * @throws RuntimeException If an error occurs while selecting data from the table
      */
-    public static ArrayList<ArrayList<String>> queryData(String table, ArrayList<String> columns, String condition) {
+    public List<List<String>> queryData(String table, List<String> columns, String condition) {
+        if (columns == null) {
+            columns = new ArrayList<>();
+            columns.add("*");
+        }
+
         String sql = "SELECT " + String.join(", ", columns) + " FROM " + table + " WHERE " + condition;
 
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
-            ArrayList<ArrayList<String>> result = new ArrayList<>();
+            List<List<String>> result = new ArrayList<>();
             while (rs.next()) {
-                ArrayList<String> row = new ArrayList<>();
+                List<String> row = new ArrayList<>();
                 for (String column : columns) {
                     row.add(rs.getString(column));
                 }

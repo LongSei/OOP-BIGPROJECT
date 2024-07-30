@@ -6,3 +6,4 @@ com/example/Database/DataHelper.class
 com/example/Dictionary/DictionaryCommandLine.class
 com/example/GoogleAPI/APITranslator.class
 com/example/Dictionary/Dictionary.class
+com/example/Dictionary/DictionaryDatabase.class

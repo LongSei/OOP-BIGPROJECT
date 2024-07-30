@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,12 +49,12 @@ public class DictionaryCommandLineTest {
 
     @Test
     public void testExportData() {
-        ArrayList<String> meanings1 = new ArrayList<>();
+        List<String> meanings1 = new ArrayList<String>();
         Dictionary dictionary = new Dictionary();
         meanings1.add("xin chào");
         dictionary.addWord(new Word("hello", meanings1));
 
-        ArrayList<String> meanings2 = new ArrayList<>();
+        List<String> meanings2 = new ArrayList<String>();
         meanings2.add("thế giới");
         dictionary.addWord(new Word("world", meanings2));
 

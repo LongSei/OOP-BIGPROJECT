@@ -1,5 +1,6 @@
 package com.example.Dictionary;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,12 +49,12 @@ public class DictionaryCommandLine extends DictionaryManagement {
      */
     @Override
     public void exportData(Dictionary dictionary) {
-        Map<String, ArrayList<String>> dataSplitByColumn = new HashMap<>();
+        Map<String, List<String>> dataSplitByColumn = new HashMap<>();
         for (Word word : dictionary.getAllWords()) {
             dataSplitByColumn.put(word.getWordTarget(), word.getWordExplain());
         }
 
-        ArrayList<Integer> columnWidth = new ArrayList<>();
+        List<Integer> columnWidth = new ArrayList<>();
         columnWidth.add(10);
         columnWidth.add(15);
 
@@ -87,11 +88,11 @@ public class DictionaryCommandLine extends DictionaryManagement {
         return wrappedText.toString();
     }
 
-    private String tableCreating(Map<String, ArrayList<String>> data, ArrayList<Integer> columnWidth) {
+    private String tableCreating(Map<String, List<String>> data, List<Integer> columnWidth) {
         String table = "+" + "-".repeat(columnWidth.get(0)) + "+" + "-".repeat(columnWidth.get(1)) + "+\n";
-        for (Map.Entry<String, ArrayList<String>> entry : data.entrySet()) {
+        for (Map.Entry<String, List<String>> entry : data.entrySet()) {
             String word = entry.getKey();
-            ArrayList<String> meanings = entry.getValue();
+            List<String> meanings = entry.getValue();
 
             String wordColumn = textWrapping(word, columnWidth.get(0));
             

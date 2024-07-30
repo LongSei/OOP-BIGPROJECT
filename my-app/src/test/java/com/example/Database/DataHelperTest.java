@@ -6,20 +6,24 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.crypto.Data;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DataHelperTest {
+    private DataHelper dataHelper = new DataHelper();
 
     @BeforeEach
     public void setupDatabase() {
-        DataHelper.createTable();
+        dataHelper.createTable();
     }
 
     @AfterEach
     public void teardownDatabase() {
-        try (Connection conn = DataHelper.getConnection();
+        try (Connection conn = dataHelper.getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.execute("DROP TABLE IF EXISTS Words;");
             stmt.execute("DROP TABLE IF EXISTS Translations;");
@@ -32,7 +36,7 @@ public class DataHelperTest {
     @Test
     public void testConnection() {
         try {
-            Connection conn = DataHelper.getConnection();
+            Connection conn = dataHelper.getConnection();
             assertNotNull(conn);
             conn.close();
         } catch (Exception e) {
@@ -44,8 +48,8 @@ public class DataHelperTest {
     @Test
     public void testCreateTable() {
         try {
-            DataHelper.createTable();
-            try (Connection conn = DataHelper.getConnection();
+            dataHelper.createTable();
+            try (Connection conn = dataHelper.getConnection();
                  Statement stmt = conn.createStatement()) {
                 assertNotNull(conn);
 
@@ -64,17 +68,17 @@ public class DataHelperTest {
 
     @Test
     public void testInsertData() {
-        ArrayList<String> columns = new ArrayList<>();
+        List<String> columns = new ArrayList<>();
         columns.add("word_target");
         columns.add("word_explain");
 
-        ArrayList<String> values = new ArrayList<>();
+        List<String> values = new ArrayList<>();
         values.add("hello");
         values.add("xin chào");
 
-        DataHelper.insertData("Words", columns, values);
+        dataHelper.insertData("Words", columns, values);
 
-        ArrayList<ArrayList<String>> result = DataHelper.queryData("Words", columns, "word_target='hello'");
+        List<List<String>> result = dataHelper.queryData("Words", columns, "word_target='hello'");
         assertEquals(1, result.size());
         assertEquals("hello", result.get(0).get(0));
         assertEquals("xin chào", result.get(0).get(1));
@@ -82,54 +86,54 @@ public class DataHelperTest {
 
     @Test
     public void testUpdateData() {
-        ArrayList<String> columns = new ArrayList<>();
+        List<String> columns = new ArrayList<>();
         columns.add("word_target");
         columns.add("word_explain");
 
-        ArrayList<String> values = new ArrayList<>();
+        List<String> values = new ArrayList<>();
         values.add("hello");
         values.add("xin chào");
 
-        DataHelper.insertData("Words", columns, values);
+        dataHelper.insertData("Words", columns, values);
 
-        ArrayList<String> newColumns = new ArrayList<>();
+        List<String> newColumns = new ArrayList<>();
         newColumns.add("word_explain");
 
-        ArrayList<String> newValues = new ArrayList<>();
+        List<String> newValues = new ArrayList<>();
         newValues.add("chào bạn");
 
-        DataHelper.updateData("Words", newColumns, newValues, "word_target='hello'");
+        dataHelper.updateData("Words", newColumns, newValues, "word_target='hello'");
 
-        ArrayList<ArrayList<String>> result = DataHelper.queryData("Words", newColumns, "word_target='hello'");
+        List<List<String>> result = dataHelper.queryData("Words", newColumns, "word_target='hello'");
         assertEquals(1, result.size());
         assertEquals("chào bạn", result.get(0).get(0));
     }
 
     @Test
     public void testDeleteData() {
-        DataHelper.deleteData("Words", "word_target='hello'");
+        dataHelper.deleteData("Words", "word_target='hello'");
 
-        ArrayList<String> columns = new ArrayList<>();
+        List<String> columns = new ArrayList<>();
         columns.add("word_target");
         columns.add("word_explain");
 
-        ArrayList<ArrayList<String>> result = DataHelper.queryData("Words", columns, "word_target='hello'");
+        List<List<String>> result = dataHelper.queryData("Words", columns, "word_target='hello'");
         assertEquals(0, result.size());
     }
 
     @Test
     public void testQueryData() {
-        ArrayList<String> columns = new ArrayList<>();
+        List<String> columns = new ArrayList<>();
         columns.add("word_target");
         columns.add("word_explain");
 
-        ArrayList<String> values = new ArrayList<>();
+        List<String> values = new ArrayList<>();
         values.add("hello");
         values.add("xin chào");
 
-        DataHelper.insertData("Words", columns, values);
+        dataHelper.insertData("Words", columns, values);
 
-        ArrayList<ArrayList<String>> result = DataHelper.queryData("Words", columns, "word_target='hello'");
+        List<List<String>> result = dataHelper.queryData("Words", columns, "word_target='hello'");
         assertEquals(1, result.size());
         assertEquals("hello", result.get(0).get(0));
         assertEquals("xin chào", result.get(0).get(1));
