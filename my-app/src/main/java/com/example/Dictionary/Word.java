@@ -1,10 +1,11 @@
 package com.example.Dictionary;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Word {
     private String word_target;
-    private ArrayList<String> word_explain;
+    private List<String> word_explain;
 
     public Word() {
         word_target = "";
@@ -16,7 +17,7 @@ public class Word {
      * @param word_target
      * @param word_explain
      */
-    public Word(String word_target, ArrayList<String> word_explain) {
+    public Word(String word_target, List<String> word_explain) {
         this.word_target = word_target;
         this.word_explain = word_explain;
     }
@@ -29,11 +30,11 @@ public class Word {
         this.word_target = word_target;
     }
 
-    public ArrayList<String> getWordExplain() {
+    public List<String> getWordExplain() {
         return word_explain;
     }
 
-    public void setWordExplain(ArrayList<String> word_explain) {
+    public void setWordExplain(List<String> word_explain) {
         this.word_explain = word_explain;
     }
 

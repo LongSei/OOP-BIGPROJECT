@@ -9,6 +9,8 @@ public class DictionaryCommandLine extends DictionaryManagement {
     /**
      * Import data from user input.
      * The user will input the number of words and then input the word and its meaning.
+     * The words will be added to the dictionary.
+     * @param dictionary The dictionary to import data to.
      */
     @Override
     public void importData(Dictionary dictionary) {
@@ -37,6 +39,13 @@ public class DictionaryCommandLine extends DictionaryManagement {
         }
     }
 
+    /** 
+     * Show all words in the dictionary in table format.
+     * The table will have 2 columns: Word and Meaning.
+     * The width of the columns will be adjusted to fit the content.
+     * @param dictionary The dictionary to be displayed.
+     * @return The table as a String.
+     */
     @Override
     public void exportData(Dictionary dictionary) {
         Map<String, ArrayList<String>> dataSplitByColumn = new HashMap<>();
