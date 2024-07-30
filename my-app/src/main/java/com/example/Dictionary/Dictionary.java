@@ -1,12 +1,13 @@
 package com.example.Dictionary;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Dictionary {
-    private ArrayList<Word> words = new ArrayList<Word>();
+    private List<Word> words = new ArrayList<Word>();
 
     public Dictionary() {
-        words = new ArrayList<Word>();
+        this.words = new ArrayList<Word>();
     }
 
     /**
@@ -15,8 +16,8 @@ public class Dictionary {
      * @param word      word need to add
      */
     public void addWord(Word word) {
-        for (int i = 0; i < words.size(); i++) {
-            Word w = words.get(i); 
+        for (int i = 0; i < this.words.size(); i++) {
+            Word w = this.words.get(i); 
             if (w.getWordTarget().equals(word.getWordTarget())) {
                 for (String s : word.getWordExplain()) {
                     w.addWordExplain(s);
@@ -24,7 +25,7 @@ public class Dictionary {
                 return;
             }
         }
-        words.add(word);
+        this.words.add(word);
     }
 
     /**
@@ -32,10 +33,10 @@ public class Dictionary {
      * @param word      word need to remove
      */
     public void removeWord(Word word) {
-        for (int i = 0; i < words.size(); i++) {
-            Word w = words.get(i); 
+        for (int i = 0; i < this.words.size(); i++) {
+            Word w = this.words.get(i); 
             if (w.getWordTarget().equals(word.getWordTarget())) {
-                words.remove(w);
+                this.words.remove(w);
                 return;
             }
         }
@@ -47,7 +48,7 @@ public class Dictionary {
      * @return          word at index
      */
     public Word getWordByIndex(int index) {
-        return words.get(index);
+        return this.words.get(index);
     }
 
     /**
@@ -56,8 +57,8 @@ public class Dictionary {
      * @return          word with target
      */
     public Word getWordByTarget(String target) {
-        for (int i = 0; i < words.size(); i++) {
-            Word w = words.get(i);
+        for (int i = 0; i < this.words.size(); i++) {
+            Word w = this.words.get(i);
             if (w.getWordTarget().equals(target)) {
                 return w;
             }
@@ -66,10 +67,10 @@ public class Dictionary {
     }
 
     public int getSize() {
-        return words.size();
+        return this.words.size();
     }
 
-    public ArrayList<Word> getAllWords() {
-        return words;
+    public List<Word> getAllWords() {
+        return this.words;
     }    
 }
