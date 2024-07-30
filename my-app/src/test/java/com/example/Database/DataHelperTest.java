@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.crypto.Data;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -137,5 +135,33 @@ public class DataHelperTest {
         assertEquals(1, result.size());
         assertEquals("hello", result.get(0).get(0));
         assertEquals("xin chào", result.get(0).get(1));
+    }
+
+    @Test 
+    public void testQueryAllData() {
+        List<String> columns = new ArrayList<>();
+        columns.add("word_target");
+        columns.add("word_explain");
+
+        List<String> values = new ArrayList<>();
+        values.add("hello");
+        values.add("xin chào");
+
+        dataHelper.insertData("Words", columns, values);
+
+        List<List<String>> result = dataHelper.queryData("Words", null);
+        assertEquals(1, result.size());
+        assertEquals("1", result.get(0).get(0));
+        assertEquals("hello", result.get(0).get(1));
+        assertEquals("xin chào", result.get(0).get(2));
+    }
+
+    @Test
+    public void testGetAllColumns() {
+        List<String> result = dataHelper.getAllColumns("Words");
+        assertEquals(3, result.size());
+        assertTrue(result.contains("id"));
+        assertTrue(result.contains("word_target"));
+        assertTrue(result.contains("word_explain"));
     }
 }
