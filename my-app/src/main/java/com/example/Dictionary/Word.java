@@ -8,8 +8,8 @@ public class Word {
     private List<String> word_explain;
 
     public Word() {
-        word_target = "";
-        word_explain = new ArrayList<>();
+        this.word_target = "";
+        this.word_explain = new ArrayList<>();
     }
 
     /**
@@ -23,7 +23,7 @@ public class Word {
     }
 
     public String getWordTarget() {
-        return word_target;
+        return this.word_target;
     }
 
     public void setWordTarget(String word_target) {
@@ -31,7 +31,7 @@ public class Word {
     }
 
     public List<String> getWordExplain() {
-        return word_explain;
+        return this.word_explain;
     }
 
     public void setWordExplain(List<String> word_explain) {
