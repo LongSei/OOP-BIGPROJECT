@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DictionaryDatabase extends DictionaryManagement {
+    /**
+     * Import data from the database.
+     * The words will be added to the dictionary.
+     * @param dictionary The dictionary to import data to.
+     */
     @Override
     public void importData(Dictionary dictionary) {
         DataHelper dataHelper = new DataHelper();
@@ -21,8 +26,29 @@ public class DictionaryDatabase extends DictionaryManagement {
         }
     };
 
+    /**
+     * Export data to the database.
+     * The words will be exported to the database.
+     * @param dictionary The dictionary to export data from.
+     */
     @Override
     public void exportData(Dictionary dictionary) {
-        return;
+        DataHelper dataHelper = new DataHelper();
+        dataHelper.clearTable("Words");
+
+        for (Word word : dictionary.getAllWords()) {
+            for (String word_explain : word.getWordExplain()) {
+                List<String> colums = new ArrayList<>();
+                List<String> values = new ArrayList<>();
+
+                colums.add("word_target");
+                colums.add("word_explain");
+
+                values.add(word.getWordTarget());
+                values.add(word_explain);
+
+                dataHelper.insertData("Words", colums, values);
+            }
+        }
     };
 }
