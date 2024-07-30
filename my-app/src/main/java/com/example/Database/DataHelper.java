@@ -217,8 +217,7 @@ public class DataHelper {
      */
     public List<List<String>> queryData(String table, List<String> columns) {
         if (columns == null) {
-            columns = new ArrayList<>();
-            columns.add("*");
+            columns = getAllColumns(table);
         }
 
         String sql = "SELECT " + String.join(", ", columns) + " FROM " + table;
@@ -253,8 +252,7 @@ public class DataHelper {
      */
     public List<List<String>> queryData(String table, List<String> columns, String condition) {
         if (columns == null) {
-            columns = new ArrayList<>();
-            columns.add("*");
+            columns = getAllColumns(table);
         }
 
         String sql = "SELECT " + String.join(", ", columns) + " FROM " + table + " WHERE " + condition;
@@ -276,6 +274,46 @@ public class DataHelper {
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error in querying data from the table: " + e.getMessage() + "\nSQL: " + sql);
+        }
+    }
+
+    /**
+     * Clear the table.
+     *
+     * @param table     The name of the table
+     * @throws RuntimeException If an error occurs while clearing the table
+     */
+    public void clearTable(String table) {
+        String sql = "DELETE FROM " + table;
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error in clearing the table: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Get all columns of the table.
+     * @param table     The name of the table
+     * @return          The list of columns
+     * @throws RuntimeException If an error occurs while getting all columns
+     */
+    public List<String> getAllColumns(String table) {
+        String sql = "PRAGMA table_info(" + table + ")";
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            List<String> columns = new ArrayList<String>();
+            while (rs.next()) {
+                columns.add(rs.getString("name"));
+            }
+            return columns;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error in getting all columns: " + e.getMessage());
         }
     }
 }
