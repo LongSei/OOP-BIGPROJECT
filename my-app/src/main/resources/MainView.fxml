@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.MainController">
+    <MenuBar>
+        <Menu text="File">
+            <MenuItem text="Exit"/>
+        </Menu>
+        <Menu text="Help">
+            <MenuItem text="About"/>
+        </Menu>
+    </MenuBar>
+    <TextField fx:id="wordField" promptText="Enter word"/>
+    <Button text="Add Word" onAction="#handleAddWord"/>
+    <Button text="Find Word" onAction="#handleFindWord"/>
+    <Button text="Delete Word" onAction="#handleDeleteWord"/>
+    <Button text="Update Word" onAction="#handleUpdateWord"/>
+    <TextArea fx:id="outputArea" editable="false"/>
+</VBox>
