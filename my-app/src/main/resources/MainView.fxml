@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.MainController">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.MainController" spacing="10">
     <!-- Menu Bar -->
     <MenuBar>
         <Menu text="File">
@@ -14,22 +14,37 @@
         </Menu>
     </MenuBar>
 
-    <!-- Dictionary Table -->
-    <TableView fx:id="dictionaryTable" styleClass="table-view">
-        <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-        </columnResizePolicy>
-        <columns>
-            <TableColumn fx:id="wordColumn" text="Word" />
-            <TableColumn fx:id="meaningColumn" text="Meaning" />
-        </columns>
-    </TableView>
+    <!-- Dictionary Tables -->
+    <HBox spacing="10">
+        <!-- First TableView with its unique style -->
+        <TableView fx:id="dictionaryTable1" styleClass="table-view-1" prefWidth="600" prefHeight="200">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <columns>
+                <TableColumn fx:id="wordColumn1" text="Word"/>
+            </columns>
+        </TableView>
+
+        <!-- Second TableView with its unique style -->
+        <TableView fx:id="dictionaryTable2" styleClass="table-view-2" prefWidth="600" prefHeight="200">
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+            <columns>
+                <TableColumn fx:id="wordColumn2" text="Word"/>
+                <TableColumn fx:id="meaningColumn2" text="Meaning"/>
+            </columns>
+        </TableView>
+    </HBox>
 
     <!-- Main Content -->
-    <TextField fx:id="wordField" promptText="Enter word" styleClass="text-field"/>
-    <TextField fx:id="meaningField" promptText="Enter meaning" styleClass="text-field"/>
+    <HBox spacing="10">
+        <TextField fx:id="wordField" promptText="Enter word" styleClass="text-field"/>
+        <TextField fx:id="meaningField" promptText="Enter meaning" styleClass="text-field"/>
+    </HBox>
 
-    <!-- Main UI -->
+    <!-- Main UI Buttons -->
     <HBox spacing="10">
         <Button text="Add Word" onAction="#handleAddWord" styleClass="button"/>
         <Button text="Find Word" onAction="#handleFindWord" styleClass="button"/>

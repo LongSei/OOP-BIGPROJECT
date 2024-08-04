@@ -4,6 +4,7 @@ import com.example.Dictionary.Dictionary;
 import com.example.Dictionary.Word;
 import com.example.Algorithm.Trie;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ public class MainController {
     private Dictionary dictionary = new Dictionary();
     private Trie trie = new Trie();
     private ObservableList<Word> wordList = FXCollections.observableArrayList();
+    private ObservableList<Word> meaningList = FXCollections.observableArrayList();
 
     // Main Content
     @FXML
@@ -43,38 +45,53 @@ public class MainController {
 
     // Dictionary Table
     @FXML
-    private TableView<Word> dictionaryTable;
+    private TableView<Word> dictionaryTable1;
     @FXML
-    private TableColumn<Word, String> wordColumn;
-    @FXML 
-    private TableColumn<Word, String> meaningColumn;
-
-    private void refreshTable() {
-        wordList.clear();
-        wordList.addAll(dictionary.getAllWords());
-    }    
+    private TableView<Word> dictionaryTable2;
+    @FXML
+    private TableColumn<Word, String> wordColumn1;
+    @FXML
+    private TableColumn<Word, String> wordColumn2;
+    @FXML
+    private TableColumn<Word, String> meaningColumn2;
 
     @FXML
     private void initialize() {
-        wordColumn.setCellValueFactory(new PropertyValueFactory<>("wordTarget"));
-        meaningColumn.setCellValueFactory(new PropertyValueFactory<>("wordExplain"));
-        dictionaryTable.setItems(wordList);
+        // Initialize TableView columns
+        wordColumn1.setCellValueFactory(new PropertyValueFactory<>("wordTarget"));
+        dictionaryTable1.setItems(wordList);
 
-        // Import existing dictionary into the Trie
+        wordColumn2.setCellValueFactory(new PropertyValueFactory<>("wordTarget"));
+        meaningColumn2.setCellValueFactory(cellData -> {
+            List<String> meanings = cellData.getValue().getWordExplain();
+            return new SimpleStringProperty(String.join(", ", meanings));
+        });
+        dictionaryTable2.setItems(meaningList);
+
         trie.importDictionary(dictionary);
-    }
+
+        wordField.textProperty().addListener((observable, oldValue, newValue) -> {
+            updateSuggestions(newValue);
+        });
+    }    
 
     @FXML
     private void handleAddWord() {
         try {
             String word = wordField.getText().trim();
             String definition = meaningField.getText().trim();
-    
+
+            if (word.isEmpty() || definition.isEmpty()) {
+                logArea.appendText("Error: Word or definition cannot be empty.\n");
+                return;
+            }
+
             Word newWord = new Word(word, List.of(definition));
             dictionary.addWord(newWord);
             trie.insert(trie.root, word, List.of(definition));
             refreshTable();
             logArea.appendText("Added: \n- Word: " + word + "\n- Definition: " + definition + "\n");
+
             wordField.clear();
             meaningField.clear();
         } catch (Exception e) {
@@ -85,23 +102,38 @@ public class MainController {
     @FXML
     private void handleFindWord() {
         String word = wordField.getText().trim();
+        if (word.isEmpty()) {
+            logArea.appendText("Error: Word field is empty.\n");
+            return;
+        }
+
         if (trie.searchWord(word)) {
-            List<String> meanings = trie.searchMeaning(word);
-            logArea.appendText("Found Word: " + word + "\n");
-            for (String meaning : meanings) {
-                logArea.appendText("Definition: " + meaning + "\n");
+            Word wordFound = dictionary.getWordByTarget(word);
+            meaningList.clear();
+            for (String meaning : wordFound.getWordExplain()) {
+                meaningList.add(new Word(word, List.of(meaning)));
             }
+            dictionaryTable2.setItems(meaningList);
+            logArea.appendText("Found Word: " + word + "\n");
         } else {
             logArea.appendText("Word not found: " + word + "\n");
+            meaningList.clear(); // Clear the list if word is not found
+            dictionaryTable2.setItems(meaningList);
         }
     }
 
     @FXML
     private void handleDeleteWord() {
         String word = wordField.getText().trim();
+        if (word.isEmpty()) {
+            logArea.appendText("Error: Word field is empty.\n");
+            return;
+        }
+
         Word wordToDelete = dictionary.getWordByTarget(word);
         if (wordToDelete != null) {
             dictionary.removeWord(wordToDelete);
+            trie.delete(trie.root, word);
             refreshTable();
             logArea.appendText("Deleted Word: " + word + "\n");
         } else {
@@ -113,6 +145,11 @@ public class MainController {
     private void handleUpdateWord() {
         String word = wordField.getText().trim();
         String definition = meaningField.getText().trim();
+        if (word.isEmpty() || definition.isEmpty()) {
+            logArea.appendText("Error: Word or definition cannot be empty.\n");
+            return;
+        }
+
         Word wordToUpdate = dictionary.getWordByTarget(word);
         if (wordToUpdate != null) {
             wordToUpdate.addWordExplain(definition);
@@ -121,5 +158,18 @@ public class MainController {
         } else {
             logArea.appendText("Word not found: " + word + "\n");
         }
+    }
+
+    private void updateSuggestions(String prefix) {
+        List<Word> suggestions = trie.getSuggestions(prefix.trim());
+        wordList.clear();
+        wordList.addAll(suggestions);
+        dictionaryTable1.setItems(wordList);
+    }
+
+    private void refreshTable() {
+        wordList.clear();
+        wordList.addAll(dictionary.getAllWords());
+        dictionaryTable1.setItems(wordList);
     }
 }
