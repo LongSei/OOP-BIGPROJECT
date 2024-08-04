@@ -55,12 +55,13 @@ public class Word {
     /**
      * Removes an explanation from the list.
      * @param explanation the explanation to remove
+     * @return true if the explanation was removed, false otherwise
      */
-    public void removeWordExplain(String explanation) {
+    public boolean removeWordExplain(String explanation) {
         if (explanation == null) {
             throw new IllegalArgumentException("Explanation cannot be null");
         }
-        wordExplain.remove(explanation);
+        return wordExplain.remove(explanation);
     }
 
     @Override
