@@ -125,21 +125,71 @@ public class MainController {
     @FXML
     private void handleDeleteWord() {
         String word = wordField.getText().trim();
+        String definition = meaningField.getText().trim();
         if (word.isEmpty()) {
             logArea.appendText("Error: Word field is empty.\n");
             return;
         }
-
-        Word wordToDelete = dictionary.getWordByTarget(word);
-        if (wordToDelete != null) {
-            dictionary.removeWord(wordToDelete);
-            trie.delete(trie.root, word);
-            refreshTable();
-            logArea.appendText("Deleted Word: " + word + "\n");
+    
+        if (definition.isEmpty()) {
+            // Remove all Words with the same wordTarget
+            try {
+                List<Word> wordsToRemove = dictionary.getAllWords().stream()
+                        .filter(w -> w.getWordTarget().equals(word))
+                        .toList();
+        
+                for (Word wordToRemove : wordsToRemove) {
+                    dictionary.removeWord(wordToRemove);
+                    trie.delete(trie.root, wordToRemove.getWordTarget());
+                }
+        
+                meaningList.removeIf(w -> w.getWordTarget().equals(word));
+                wordList.removeIf(w -> w.getWordTarget().equals(word));
+        
+                refreshTable();
+                logArea.appendText("Deleted all entries for Word: " + word + "\n");
+            } catch (Exception e) {
+                logArea.appendText("Error: " + e.getMessage() + "\n");
+            }
+    
         } else {
-            logArea.appendText("Word not found: " + word + "\n");
+            // Remove only the specific meaning of the word
+            try {
+                Word wordToUpdate = dictionary.getWordByTarget(word);
+                if (wordToUpdate != null) {
+                    logArea.appendText("Deleted Meaning: " + definition + " from Word: " + word + "\n");
+                    boolean removed = wordToUpdate.removeWordExplain(definition);
+                    if (removed) {
+                        if (wordToUpdate.getWordExplain().isEmpty()) {
+                            logArea.appendText("Deleted Word: " + word + "\n");
+                            // If no meanings left, remove the word completely
+                            dictionary.removeWord(wordToUpdate);
+                            trie.delete(trie.root, wordToUpdate.getWordTarget());
+                        } else {
+                            // Update the word in the dictionary
+                            logArea.appendText("Deleted Meaning: " + definition + " from Word: " + word + "\n");
+                            dictionary.removeMeaning(wordToUpdate, definition);
+                            trie.removeMeaning(trie.root, word, definition);
+                        }
+        
+                        logArea.appendText("Deleted Meaning2: " + definition + " from Word: " + word + "\n");
+                        // Remove specific meaning from the meaningList and wordList
+                        meaningList.removeIf(w -> w.getWordTarget().equals(word) && w.getWordExplain().contains(definition));
+                        wordList.removeIf(w -> w.getWordTarget().equals(word) && w.getWordExplain().contains(definition));
+        
+                        refreshTable();
+                        logArea.appendText("Deleted Meaning: " + definition + " from Word: " + word + "\n");
+                    } else {
+                        logArea.appendText("Error: Definition not found for Word: " + word + "\n");
+                    }
+                } else {
+                    logArea.appendText("Word not found: " + word + "\n");
+                }
+            } catch (Exception e) {
+                logArea.appendText("Error: " + e.getMessage() + "\n");
+            }
         }
-    }
+    }    
 
     @FXML
     private void handleUpdateWord() {
