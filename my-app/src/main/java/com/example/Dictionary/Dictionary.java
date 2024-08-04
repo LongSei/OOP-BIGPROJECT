@@ -43,6 +43,24 @@ public class Dictionary {
     }
 
     /**
+     * Remove a meaning from a word.
+     * @param word      word need to remove meaning
+     * @param meaning   meaning need to remove
+     */
+    public void removeMeaning(Word word, String meaning) {
+        for (int i = 0; i < this.words.size(); i++) {
+            Word w = this.words.get(i);
+            if (w.getWordTarget().equals(word.getWordTarget())) {
+                w.removeWordExplain(meaning);
+                if (w.getWordExplain().isEmpty()) {
+                    this.words.remove(i);
+                }
+                return;
+            }
+        }
+    }    
+
+    /**
      * Get a word by index.
      * @param index     index of word
      * @return          word at index
