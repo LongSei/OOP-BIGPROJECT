@@ -1,17 +1,13 @@
 package com.example.Algorithm;
 
-import com.example.Dictionary.Dictionary;
-import com.example.Dictionary.Word;
-
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
+import com.example.Dictionary.Word;
+
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 public class TrieTest {
-
     private Trie trie;
 
     @BeforeEach
@@ -21,48 +17,78 @@ public class TrieTest {
 
     @Test
     public void testInsertAndSearchWord() {
-        List<String> meanings = new ArrayList<>();
-        meanings.add("a greeting");
-        trie.insert(trie.root, "hello", meanings);
-
+        trie.insert(trie.root, "hello", List.of("greeting"));
         assertTrue(trie.searchWord("hello"));
         assertFalse(trie.searchWord("hell"));
-        assertFalse(trie.searchWord("helloo"));
     }
 
     @Test
     public void testSearchMeaning() {
-        List<String> meanings = new ArrayList<>();
-        meanings.add("a greeting");
-        trie.insert(trie.root, "hello", meanings);
-
-        List<String> result = trie.searchMeaning("hello");
-        assertEquals(meanings, result);
+        trie.insert(trie.root, "world", List.of("earth", "globe"));
+        List<String> meanings = trie.searchMeaning("world");
+        assertTrue(meanings.contains("earth"));
+        assertTrue(meanings.contains("globe"));
+        assertFalse(meanings.contains("universe"));
     }
 
     @Test
-    public void testStartsWith() {
-        List<String> meanings = new ArrayList<>();
-        meanings.add("a greeting");
-        trie.insert(trie.root, "hello", meanings);
-        trie.insert(trie.root, "hell", meanings);
-
-        assertNotNull(trie.startsWith("hel"));
-        assertNull(trie.startsWith("heaven"));
+    public void testDeleteWord() {
+        trie.insert(trie.root, "test", List.of("experiment"));
+        trie.delete(trie.root, "test");
+        assertFalse(trie.searchWord("test"));
     }
 
     @Test
-    public void testImportDictionary() {
-        Dictionary dictionary = new Dictionary(); 
-        List<String> meanings = new ArrayList<>();
-        meanings.add("a greeting");
-        dictionary.addWord(new Word("hello", meanings));
-        dictionary.addWord(new Word("hell", meanings));
+    public void testUpdateWordTarget() {
+        Trie trie = new Trie();
+        trie.insert(trie.root, "old", List.of("previous"));
+    
+        // Print the trie before the update
+        System.out.println("Trie before update:");
+        trie.printAllWords();
+    
+        // Update the word from "old" to "new"
+        trie.updateWordTarget("old", "new");
+    
+        // Print the trie after the update
+        System.out.println("Trie after update:");
+        trie.printAllWords();
+    
+        // Check that the old word is not present
+        assertFalse(trie.searchWord("old"));
+    
+        // Check that the new word is present
+        assertTrue(trie.searchWord("new"));
+        assertEquals(List.of("previous"), trie.searchMeaning("new"));
+    }
+    
+    
 
-        trie.importDictionary(dictionary);
+    @Test
+    public void testUpdateWordMeaning() {
+        trie.insert(trie.root, "update", List.of("change"));
+        trie.updateWordMeaning("update", "change", "modify");
+        List<String> meanings = trie.searchMeaning("update");
+        assertTrue(meanings.contains("modify"));
+        assertFalse(meanings.contains("change"));
+    }
 
-        assertTrue(trie.searchWord("hello"));
-        assertTrue(trie.searchWord("hell"));
-        assertFalse(trie.searchWord("helloo"));
+    @Test
+    public void testGetSuggestions() {
+        trie.insert(trie.root, "apple", List.of("fruit"));
+        trie.insert(trie.root, "appreciate", List.of("value"));
+        List<Word> suggestions = trie.getSuggestions("app");
+        assertEquals(2, suggestions.size());
+        assertTrue(suggestions.stream().anyMatch(word -> word.getWordTarget().equals("apple")));
+        assertTrue(suggestions.stream().anyMatch(word -> word.getWordTarget().equals("appreciate")));
+    }
+
+    @Test
+    public void testRemoveMeaning() {
+        trie.insert(trie.root, "word", List.of("definition1", "definition2"));
+        trie.removeMeaning(trie.root, "word", "definition1");
+        List<String> meanings = trie.searchMeaning("word");
+        assertTrue(meanings.contains("definition2"));
+        assertFalse(meanings.contains("definition1"));
     }
 }
