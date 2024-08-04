@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.MainController">
+    <!-- Menu Bar -->
     <MenuBar>
         <Menu text="File">
             <MenuItem text="Exit"/>
@@ -12,10 +13,25 @@
             <MenuItem text="About"/>
         </Menu>
     </MenuBar>
-    <TextField fx:id="wordField" promptText="Enter word"/>
-    <Button text="Add Word" onAction="#handleAddWord"/>
-    <Button text="Find Word" onAction="#handleFindWord"/>
-    <Button text="Delete Word" onAction="#handleDeleteWord"/>
-    <Button text="Update Word" onAction="#handleUpdateWord"/>
-    <TextArea fx:id="outputArea" editable="false"/>
+
+    <!-- Main Content -->
+    <TextField fx:id="wordField" promptText="Enter word" styleClass="text-field"/>
+    <TextField fx:id="meaningField" promptText="Enter meaning" styleClass="text-field"/>
+
+    <!-- Main UI -->
+    <Button text="Add Word" onAction="#handleAddWord" styleClass="button"/>
+    <Button text="Find Word" onAction="#handleFindWord" styleClass="button"/>
+    <Button text="Delete Word" onAction="#handleDeleteWord" styleClass="button"/>
+    <Button text="Update Word" onAction="#handleUpdateWord" styleClass="button"/>
+    
+    <!-- Log Area -->
+    <TextArea fx:id="logArea" editable="false" styleClass="text-area"/>
+
+    <!-- Dictionary Table -->
+    <TableView fx:id="dictionaryTable" styleClass="text-area">
+        <columns>
+            <TableColumn fx:id="wordColumn" text="Word"/>
+            <TableColumn fx:id="meaningColumn" text="Meaning"/>
+        </columns>
+    </TableView>
 </VBox>
