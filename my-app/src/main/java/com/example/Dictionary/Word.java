@@ -52,6 +52,7 @@ public class Word {
                 return;
             }
         }
+        this.word_explain.add(word_explain);
     }
 
     /**
