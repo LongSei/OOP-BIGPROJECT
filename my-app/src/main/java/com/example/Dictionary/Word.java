@@ -1,7 +1,6 @@
 package com.example.Dictionary;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Word {
@@ -32,7 +31,7 @@ public class Word {
     }
 
     public List<String> getWordExplain() {
-        return Collections.unmodifiableList(wordExplain); 
+        return this.wordExplain;
     }
 
     public void setWordExplain(List<String> wordExplain) {

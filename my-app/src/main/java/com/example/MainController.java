@@ -45,6 +45,8 @@ public class MainController {
     private TextArea logArea;
 
     // Dictionary Table
+    private String selectedWord = "";
+    private String selectedMeaning = "";
     @FXML
     private TableView<Word> dictionaryTable1;
     @FXML
@@ -82,6 +84,8 @@ public class MainController {
                     Word rowData = row.getItem();
                     wordField.setText(rowData.getWordTarget());
                     meaningField.clear();
+                    selectedWord = rowData.getWordTarget();
+                    selectedMeaning = ""; 
                 }
             });
             return row;
@@ -94,11 +98,13 @@ public class MainController {
                     Word rowData = row.getItem();
                     wordField.setText(rowData.getWordTarget());
                     meaningField.setText(rowData.getWordExplain().get(0));
+                    selectedWord = rowData.getWordTarget();
+                    selectedMeaning = rowData.getWordExplain().get(0);
                 }
             });
             return row;
         });
-    }    
+    }
 
     @FXML
     private void handleAddWord() {
@@ -119,10 +125,15 @@ public class MainController {
 
             wordField.clear();
             meaningField.clear();
+
+            for (Word w : dictionary.getAllWords()) {
+                logArea.appendText(w.getWordTarget() + " " + w.getWordExplain() + "\n");
+            }
+
         } catch (Exception e) {
             logArea.appendText("Error: " + e.getMessage() + "\n");
         }
-    }    
+    }
 
     @FXML
     private void handleFindWord() {
@@ -155,28 +166,28 @@ public class MainController {
             logArea.appendText("Error: Word field is empty.\n");
             return;
         }
-    
+
         if (definition.isEmpty()) {
             // Remove all Words with the same wordTarget
             try {
                 List<Word> wordsToRemove = dictionary.getAllWords().stream()
                         .filter(w -> w.getWordTarget().equals(word))
                         .toList();
-        
+
                 for (Word wordToRemove : wordsToRemove) {
                     dictionary.removeWord(wordToRemove);
                     trie.delete(trie.root, wordToRemove.getWordTarget());
                 }
-        
+
                 meaningList.removeIf(w -> w.getWordTarget().equals(word));
                 wordList.removeIf(w -> w.getWordTarget().equals(word));
-        
+
                 refreshTable();
                 logArea.appendText("Deleted all entries for Word: " + word + "\n");
             } catch (Exception e) {
                 logArea.appendText("Error: " + e.getMessage() + "\n");
             }
-    
+
         } else {
             // Remove only the specific meaning of the word
             try {
@@ -192,16 +203,14 @@ public class MainController {
                             trie.delete(trie.root, wordToUpdate.getWordTarget());
                         } else {
                             // Update the word in the dictionary
-                            logArea.appendText("Deleted Meaning: " + definition + " from Word: " + word + "\n");
                             dictionary.removeMeaning(wordToUpdate, definition);
                             trie.removeMeaning(trie.root, word, definition);
                         }
-        
-                        logArea.appendText("Deleted Meaning2: " + definition + " from Word: " + word + "\n");
+
                         // Remove specific meaning from the meaningList and wordList
                         meaningList.removeIf(w -> w.getWordTarget().equals(word) && w.getWordExplain().contains(definition));
                         wordList.removeIf(w -> w.getWordTarget().equals(word) && w.getWordExplain().contains(definition));
-        
+
                         refreshTable();
                         logArea.appendText("Deleted Meaning: " + definition + " from Word: " + word + "\n");
                     } else {
@@ -214,37 +223,84 @@ public class MainController {
                 logArea.appendText("Error: " + e.getMessage() + "\n");
             }
         }
-    }    
+    }
 
     @FXML
     private void handleUpdateWord() {
-        String word = wordField.getText().trim();
-        String definition = meaningField.getText().trim();
-        if (word.isEmpty() || definition.isEmpty()) {
-            logArea.appendText("Error: Word or definition cannot be empty.\n");
+        if (selectedWord.isEmpty()) {
+            logArea.appendText("Error: Word field is empty.\n");
+            return;
+        }
+        if (selectedMeaning.isEmpty()) {
+            logArea.appendText("Error: Meaning field is empty.\n");
             return;
         }
 
-        Word wordToUpdate = dictionary.getWordByTarget(word);
-        if (wordToUpdate != null) {
-            wordToUpdate.addWordExplain(definition);
-            refreshTable();
-            logArea.appendText("Updated Word: " + word + "\n");
-        } else {
-            logArea.appendText("Word not found: " + word + "\n");
+        if (dictionary.getWordByTarget(selectedWord.trim()) == null) {
+            logArea.appendText("Error: Word not exists.\n");
+            return;
+        }
+
+        if (dictionary.getWordByTarget(selectedWord).getWordExplain().contains(selectedMeaning) == false) {
+            logArea.appendText("Error: Meaning not exists.\n");
+            return;
+        }
+
+        String newWord = wordField.getText().trim();
+        String newMeaning = meaningField.getText().trim();
+
+        if (newWord.isEmpty()) {
+            logArea.appendText("Error: New Word cannot be empty.\n");
+            return;
+        }
+
+        if (newMeaning.isEmpty()) {
+            logArea.appendText("Error: New Meaning cannot be empty.\n");
+            return;
+        }
+
+        try {
+            Word wordToUpdate = dictionary.getWordByTarget(selectedWord);
+
+            if (wordToUpdate != null) {
+                // Update the meaning of the word
+                dictionary.updateMeaning(newWord, selectedMeaning, newMeaning);
+                trie.updateWordMeaning(newWord, selectedMeaning, newMeaning);
+                logArea.appendText("Updated Meaning: " + selectedMeaning + " to " + newMeaning + "\n");
+
+                // Update the word
+                dictionary.updateWord(selectedWord, newWord);
+                trie.updateWordTarget(selectedWord, newWord);
+                logArea.appendText("Updated Word: " + selectedWord + " to " + newWord + "\n");
+
+                refreshTable();
+                wordField.clear();
+                meaningField.clear();
+            } else {
+                logArea.appendText("Word not found: " + selectedWord + "\n");
+            }
+        } catch (Exception e) {
+            logArea.appendText("Error: " + e.getMessage() + "\n");
         }
     }
 
     private void updateSuggestions(String prefix) {
         List<Word> suggestions = trie.getSuggestions(prefix.trim());
-        wordList.clear();
-        wordList.addAll(suggestions);
-        dictionaryTable1.setItems(wordList);
+        wordList.setAll(suggestions);
     }
 
     private void refreshTable() {
         wordList.clear();
         wordList.addAll(dictionary.getAllWords());
         dictionaryTable1.setItems(wordList);
+
+        meaningList.clear();
+        if (!selectedWord.isEmpty()) {
+            Word word = dictionary.getWordByTarget(selectedWord);
+            for (String meaning : word.getWordExplain()) {
+                meaningList.add(new Word(selectedWord, List.of(meaning)));
+            }
+        }
+        dictionaryTable2.setItems(meaningList);
     }
 }

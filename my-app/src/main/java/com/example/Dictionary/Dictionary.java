@@ -58,7 +58,43 @@ public class Dictionary {
                 return;
             }
         }
-    }    
+    }
+    
+    /**
+     * Update a word in dictionary.
+     * @param oldWord       word need to update
+     * @param newWord       new word
+     */
+    public void updateWord(String oldWord, String newWord) {
+        for (int idx = 0; idx < this.words.size(); idx++) {
+            Word w = this.words.get(idx);
+            if (w.getWordTarget().equals(oldWord)) {
+                w.setWordTarget(newWord);
+                return;
+            }
+        }
+    }
+
+    /**
+     * Update a meaning in a word.
+     * @param word          word need to update
+     * @param oldMeaning    old meaning
+     * @param newMeaning    new meaning
+     */
+    public void updateMeaning(String word, String oldMeaning, String newMeaning) {
+        for (int idx = 0; idx < this.words.size(); idx++) {
+            Word w = this.words.get(idx);
+            if (w.getWordTarget().equals(word)) {
+                List<String> meanings = w.getWordExplain();
+                for (int i = 0; i < meanings.size(); i++) {
+                    if (meanings.get(i).equals(oldMeaning)) {
+                        meanings.set(i, newMeaning);
+                        return;
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Get a word by index.
@@ -89,6 +125,6 @@ public class Dictionary {
     }
 
     public List<Word> getAllWords() {
-        return this.words;
+        return new ArrayList<>(this.words);
     }    
 }

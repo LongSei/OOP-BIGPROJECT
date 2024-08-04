@@ -14,10 +14,10 @@ public class Trie {
         List<String> meanings = new ArrayList<>();
     }
 
-    public final TrieNode root;
+    public TrieNode root = new TrieNode();
 
     public Trie() {
-        root = new TrieNode();
+        this.root = new TrieNode();
     }
 
     /**
@@ -29,6 +29,9 @@ public class Trie {
     public void insert(TrieNode node, String remain_wordTarget, List<String> wordExplain) {
         if (remain_wordTarget.isEmpty()) {
             for (String meaning : wordExplain) {
+                if (node.meanings.contains(meaning)) {
+                    continue;
+                }
                 node.meanings.add(meaning);
             }
             return;
@@ -49,25 +52,33 @@ public class Trie {
      * Delete a word from the trie.
      * @param node                  the current node
      * @param remain_wordTarget     the remaining word target
+     * @return                      true if the node should be deleted
      */
-    public void delete(TrieNode node, String remain_wordTarget) {
+    public boolean delete(TrieNode node, String remain_wordTarget) {
         if (remain_wordTarget.isEmpty()) {
             node.meanings.clear();
-            return;
+            if (node.children.isEmpty()) {
+                return true;
+            }
+            return false;
         }
         
         char currentCharacter = remain_wordTarget.charAt(0);
         TrieNode child = node.children.get(currentCharacter);
         
         if (child == null) {
-            return;
+            return true; 
         }
         
-        delete(child, remain_wordTarget.substring(1));
+        // Recursively delete from child
+        boolean shouldDeleteChild = delete(child, remain_wordTarget.substring(1));
         
-        if (child.meanings.isEmpty() && child.children.isEmpty()) {
+        if (shouldDeleteChild) {
             node.children.remove(currentCharacter);
+            return node.children.isEmpty() && node.meanings.isEmpty();
         }
+        
+        return false;
     }
 
     /**
@@ -77,7 +88,7 @@ public class Trie {
      */
     public List<String> searchMeaning(String wordTarget) {
         TrieNode node = searchNode(wordTarget);
-        return node == null ? new ArrayList<>() : node.meanings;
+        return node == null ? new ArrayList<>() : new ArrayList<>(node.meanings);
     }
 
     /**
@@ -165,6 +176,9 @@ public class Trie {
     public void removeMeaning(TrieNode node, String remain_wordTarget, String meaning) {
         if (remain_wordTarget.isEmpty()) {
             node.meanings.remove(meaning);
+            if (node.meanings.isEmpty() && node.children.isEmpty()) {
+                node.children.clear(); 
+            }
             return;
         }
         
@@ -176,9 +190,70 @@ public class Trie {
         }
         
         removeMeaning(child, remain_wordTarget.substring(1), meaning);
-    
+        
         if (child.meanings.isEmpty() && child.children.isEmpty()) {
             node.children.remove(currentCharacter);
+        }
+    }
+    
+
+    /**
+     * Update a word target in the trie.
+     * @param oldWordTarget     the old word target
+     * @param newWordTarget     the new word target
+     */
+    public void updateWordTarget(String oldWordTarget, String newWordTarget) {
+        List<String> meanings = searchMeaning(oldWordTarget);
+        boolean wasDeleted = delete(this.root, oldWordTarget);
+        if (wasDeleted) {
+            insert(this.root, newWordTarget, meanings);
+        }
+    }
+    
+
+    /**
+     * Update a word meaning in the trie.
+     * @param wordTarget        the word target
+     * @param oldMeaning        the old meaning
+     * @param newMeaning        the new meaning
+     */
+    public void updateWordMeaning(String wordTarget, String oldMeaning, String newMeaning) {
+        TrieNode node = searchNode(wordTarget);
+        if (node != null) {
+            if (node.meanings.contains(oldMeaning)) {
+                node.meanings.remove(oldMeaning);
+                node.meanings.add(newMeaning);
+            }
+        }
+    }
+    
+    /**
+     * Print all words in the trie.
+     */
+    public void printAllWords() {
+        printAllWords(root, "");
+    }
+    
+    /**
+     * Print all words in the trie.
+     * @param node              the current node
+     * @param prefix            the prefix
+     */
+    private void printAllWords(TrieNode node, String prefix) {
+        // Print the current node's word and meanings if it has any meanings
+        if (!node.meanings.isEmpty()) {
+            System.out.println("Word: " + prefix + " | Meanings: " + node.meanings);
+        }
+    
+        if (node.children.isEmpty() || node.children == null) {
+            return;
+        }
+        // Print the children nodes
+        for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+            char character = entry.getKey();
+            TrieNode childNode = entry.getValue();
+            System.out.println("Character: " + character + " | Prefix: " + prefix);
+            printAllWords(childNode, prefix + character);
         }
     }
     
