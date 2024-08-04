@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.example.Dictionary.Dictionary;
+import com.example.Dictionary.Word;
 
 public class Trie {
     private static class TrieNode {
@@ -43,6 +44,31 @@ public class Trie {
         
         insert(child, remain_wordTarget.substring(1), wordExplain);
     }    
+
+    /**
+     * Delete a word from the trie.
+     * @param node                  the current node
+     * @param remain_wordTarget     the remaining word target
+     */
+    public void delete(TrieNode node, String remain_wordTarget) {
+        if (remain_wordTarget.isEmpty()) {
+            node.meanings.clear();
+            return;
+        }
+        
+        char currentCharacter = remain_wordTarget.charAt(0);
+        TrieNode child = node.children.get(currentCharacter);
+        
+        if (child == null) {
+            return;
+        }
+        
+        delete(child, remain_wordTarget.substring(1));
+        
+        if (child.meanings.isEmpty() && child.children.isEmpty()) {
+            node.children.remove(currentCharacter);
+        }
+    }
 
     /**
      * Insert a word into the trie.
@@ -100,4 +126,60 @@ public class Trie {
             insert(root, wordTarget, wordExplain);
         }
     }
+
+    /**
+     * Get all words that start with the given prefix.
+     * @param prefix            the prefix
+     * @return                  a list of suggestions
+     */
+    public List<Word> getSuggestions(String prefix) {
+        TrieNode node = startsWith(prefix);
+        List<Word> suggestions = new ArrayList<>();
+        if (node != null) {
+            collectWords(node, prefix, suggestions);
+        }
+        return suggestions;
+    }
+
+    /**
+     * Collect all words in the subtree of the given node.
+     * @param node              the starting node
+     * @param prefix            the prefix leading to this node
+     * @param suggestions       the list to add suggestions
+     */
+    private void collectWords(TrieNode node, String prefix, List<Word> suggestions) {
+        if (!node.meanings.isEmpty()) {
+            suggestions.add(new Word(prefix, node.meanings));
+        }
+        for (char c : node.children.keySet()) {
+            collectWords(node.children.get(c), prefix + c, suggestions);
+        }
+    }    
+
+    /**
+     * Remove a meaning from the trie.
+     * @param node                  the current node
+     * @param remain_wordTarget     the remaining word target
+     * @param meaning               the meaning to remove
+     */
+    public void removeMeaning(TrieNode node, String remain_wordTarget, String meaning) {
+        if (remain_wordTarget.isEmpty()) {
+            node.meanings.remove(meaning);
+            return;
+        }
+        
+        char currentCharacter = remain_wordTarget.charAt(0);
+        TrieNode child = node.children.get(currentCharacter);
+        
+        if (child == null) {
+            return;
+        }
+        
+        removeMeaning(child, remain_wordTarget.substring(1), meaning);
+    
+        if (child.meanings.isEmpty() && child.children.isEmpty()) {
+            node.children.remove(currentCharacter);
+        }
+    }
+    
 }
