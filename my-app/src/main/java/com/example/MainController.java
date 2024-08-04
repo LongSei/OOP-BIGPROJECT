@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -72,6 +73,30 @@ public class MainController {
 
         wordField.textProperty().addListener((observable, oldValue, newValue) -> {
             updateSuggestions(newValue);
+        });
+
+        dictionaryTable1.setRowFactory(tv -> {
+            TableRow<Word> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty()) {
+                    Word rowData = row.getItem();
+                    wordField.setText(rowData.getWordTarget());
+                    meaningField.clear();
+                }
+            });
+            return row;
+        });
+
+        dictionaryTable2.setRowFactory(tv -> {
+            TableRow<Word> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty()) {
+                    Word rowData = row.getItem();
+                    wordField.setText(rowData.getWordTarget());
+                    meaningField.setText(rowData.getWordExplain().get(0));
+                }
+            });
+            return row;
         });
     }    
 
