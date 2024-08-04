@@ -19,3 +19,49 @@
     -fx-border-color: green;
     -fx-border-width: 2px;
 }
+
+/* Styles for the first TableView */
+.table-view-1 {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+    -fx-background-color: #ecf0f1;
+    -fx-font-size: 14px;
+}
+
+/* Styles for the second TableView */
+.table-view-2 {
+    -fx-border-color: #2ecc71;
+    -fx-border-width: 2px;
+    -fx-background-color: #f1c40f;
+    -fx-font-size: 14px;
+}
+
+/* Optional: Customizing column headers for each table */
+.table-view-1 .column-header {
+    -fx-background-color: #bdc3c7;
+    -fx-text-fill: #2c3e50;
+}
+
+.table-view-2 .column-header {
+    -fx-background-color: #e67e22;
+    -fx-text-fill: #fff;
+}
+
+.list-view {
+    -fx-padding: 5;
+    -fx-border-color: gray;
+    -fx-border-width: 1px;
+    
+}
+
+.list-view .scroll-bar {
+    -fx-background-color: lightgray;
+}
+
+.list-view .scroll-bar:horizontal {
+    -fx-pref-height: 15px;
+}
+
+.list-view .scroll-bar:vertical {
+    -fx-pref-width: 15px;
+}

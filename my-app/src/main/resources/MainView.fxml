@@ -3,14 +3,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.MainController" spacing="10">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.MainController" spacing="10" fx:id="rootVBox">
     <!-- Menu Bar -->
     <MenuBar>
         <Menu text="File">
-            <MenuItem text="Exit"/>
-        </Menu>
-        <Menu text="Help">
-            <MenuItem text="About"/>
+            <Menu text="Open"/>
+                <MenuItem text="Database File (*.db)" onAction="#handleOpenDictionaryDatabase"/>
+                <MenuItem text="CSV File (*.csv)" onAction="#handleOpenDictionaryCSVFile"/>
+            </Menu>
+            <Menu text="Save">
+                <MenuItem text="Database File (*.db)" onAction="#handleSaveDictionaryDatabase"/>
+                <MenuItem text="CSV File (*.csv)" onAction="#handleSaveDictionaryCSVFile"/>
+            </Menu>
+            <MenuItem text="Exit" onAction="#handleExit"/>
         </Menu>
     </MenuBar>
 
@@ -40,16 +45,16 @@
 
     <!-- Main Content -->
     <HBox spacing="10">
-        <TextField fx:id="wordField" promptText="Enter word" styleClass="text-field"/>
-        <TextField fx:id="meaningField" promptText="Enter meaning" styleClass="text-field"/>
-    </HBox>
-
-    <!-- Main UI Buttons -->
-    <HBox spacing="10">
-        <Button text="Add Word" onAction="#handleAddWord" styleClass="button"/>
-        <Button text="Find Word" onAction="#handleFindWord" styleClass="button"/>
-        <Button text="Delete Word" onAction="#handleDeleteWord" styleClass="button"/>
-        <Button text="Update Word" onAction="#handleUpdateWord" styleClass="button"/>
+        <HBox spacing="5">
+            <TextField fx:id="wordField" promptText="Enter word" styleClass="text-field"/>
+            <TextField fx:id="meaningField" promptText="Enter meaning" styleClass="text-field"/>
+        </HBox>
+        <HBox spacing="5">
+            <Button text="Add Word" onAction="#handleAddWord" styleClass="button"/>
+            <Button text="Find Word" onAction="#handleFindWord" styleClass="button"/>
+            <Button text="Delete Word" onAction="#handleDeleteWord" styleClass="button"/>
+            <Button text="Update Word" onAction="#handleUpdateWord" styleClass="button"/>
+        </HBox>
     </HBox>
 
     <!-- Log Area -->
