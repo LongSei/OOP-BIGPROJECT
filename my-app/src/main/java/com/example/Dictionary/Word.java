@@ -1,83 +1,74 @@
 package com.example.Dictionary;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Word {
-    private String word_target;
-    private List<String> word_explain;
+    private String wordTarget;
+    private List<String> wordExplain = new ArrayList<>();
 
     public Word() {
-        this.word_target = "";
-        this.word_explain = new ArrayList<>();
+        this.wordTarget = "";
+        this.wordExplain = new ArrayList<>();
     }
 
     /**
-     * Constructor Word with parameters.
-     * @param word_target
-     * @param word_explain
+     * Constructor with parameters.
+     * @param wordTarget the target word
+     * @param wordExplain the explanations for the word
      */
-    public Word(String word_target, List<String> word_explain) {
-        this.word_target = word_target;
-        this.word_explain = word_explain;
+    public Word(String wordTarget, List<String> wordExplain) {
+        this.wordTarget = wordTarget;
+        this.wordExplain = new ArrayList<>(wordExplain); 
     }
 
     public String getWordTarget() {
-        return this.word_target;
+        return wordTarget;
     }
 
-    public void setWordTarget(String word_target) {
-        this.word_target = word_target;
+    public void setWordTarget(String wordTarget) {
+        this.wordTarget = wordTarget;
     }
 
     public List<String> getWordExplain() {
-        return this.word_explain;
+        return Collections.unmodifiableList(wordExplain); 
     }
 
-    public void setWordExplain(List<String> word_explain) {
-        this.word_explain = word_explain;
-    }
-
-    /**
-     * Add a explain to word_explain.
-     * @param word_explain  word_explain need to add
-     */
-    public void addWordExplain(String word_explain) {
-        if (this.word_explain.isEmpty()) {
-            this.word_explain.add(word_explain);
-            return;
-        }
-        for (String s : this.word_explain) {
-            if (s.equals(word_explain)) {
-                return;
-            }
-        }
-        this.word_explain.add(word_explain);
+    public void setWordExplain(List<String> wordExplain) {
+        this.wordExplain = new ArrayList<>(wordExplain); 
     }
 
     /**
-     * Remove a explain from word_explain.
-     * @param word_explain  word_explain need to remove
+     * Adds an explanation to the list if it's not already present.
+     * @param explanation the explanation to add
      */
-    public void removeWordExplain(String word_explain) {
-        if (this.word_explain.isEmpty()) {
-            return;
+    public void addWordExplain(String explanation) {
+        if (explanation == null || explanation.trim().isEmpty()) {
+            throw new IllegalArgumentException("Explanation cannot be null or empty");
         }
-        for (String s : this.word_explain) {
-            if (s.equals(word_explain)) {
-                this.word_explain.remove(s);
-                return;
-            }
+        if (!wordExplain.contains(explanation)) {
+            wordExplain.add(explanation);
         }
+    }
+
+    /**
+     * Removes an explanation from the list.
+     * @param explanation the explanation to remove
+     */
+    public void removeWordExplain(String explanation) {
+        if (explanation == null) {
+            throw new IllegalArgumentException("Explanation cannot be null");
+        }
+        wordExplain.remove(explanation);
     }
 
     @Override
     public String toString() {
-        String result = "";
-        result += word_target + "\n";
-        for (String s : word_explain) {
-            result += s + "\n";
+        StringBuilder result = new StringBuilder(wordTarget + "\n");
+        for (String s : wordExplain) {
+            result.append(s).append("\n");
         }
-        return result;
+        return result.toString();
     }
 }
