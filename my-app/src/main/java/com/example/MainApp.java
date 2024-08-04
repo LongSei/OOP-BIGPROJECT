@@ -6,12 +6,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.nio.file.Paths;
+
 public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/MainView.fxml"));
+        String fxmlPath = "./src/main/resources/MainView.fxml";
+        Parent root = FXMLLoader.load(Paths.get(fxmlPath).toUri().toURL());
+
         Scene scene = new Scene(root);
+
+        String cssPath = "./src/main/resources/styles.css";
+        scene.getStylesheets().add(Paths.get(cssPath).toUri().toURL().toExternalForm());
+
         primaryStage.setTitle("JavaFX Application");
         primaryStage.setScene(scene);
         primaryStage.show();

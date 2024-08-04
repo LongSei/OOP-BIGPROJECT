@@ -14,24 +14,29 @@
         </Menu>
     </MenuBar>
 
+    <!-- Dictionary Table -->
+    <TableView fx:id="dictionaryTable" styleClass="table-view">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+        </columnResizePolicy>
+        <columns>
+            <TableColumn fx:id="wordColumn" text="Word" />
+            <TableColumn fx:id="meaningColumn" text="Meaning" />
+        </columns>
+    </TableView>
+
     <!-- Main Content -->
     <TextField fx:id="wordField" promptText="Enter word" styleClass="text-field"/>
     <TextField fx:id="meaningField" promptText="Enter meaning" styleClass="text-field"/>
 
     <!-- Main UI -->
-    <Button text="Add Word" onAction="#handleAddWord" styleClass="button"/>
-    <Button text="Find Word" onAction="#handleFindWord" styleClass="button"/>
-    <Button text="Delete Word" onAction="#handleDeleteWord" styleClass="button"/>
-    <Button text="Update Word" onAction="#handleUpdateWord" styleClass="button"/>
-    
+    <HBox spacing="10">
+        <Button text="Add Word" onAction="#handleAddWord" styleClass="button"/>
+        <Button text="Find Word" onAction="#handleFindWord" styleClass="button"/>
+        <Button text="Delete Word" onAction="#handleDeleteWord" styleClass="button"/>
+        <Button text="Update Word" onAction="#handleUpdateWord" styleClass="button"/>
+    </HBox>
+
     <!-- Log Area -->
     <TextArea fx:id="logArea" editable="false" styleClass="text-area"/>
-
-    <!-- Dictionary Table -->
-    <TableView fx:id="dictionaryTable" styleClass="text-area">
-        <columns>
-            <TableColumn fx:id="wordColumn" text="Word"/>
-            <TableColumn fx:id="meaningColumn" text="Meaning"/>
-        </columns>
-    </TableView>
 </VBox>
