@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.Dictionary.Dictionary;
 import com.example.Dictionary.Word;
+import com.example.GoogleAPI.Text2Speech;
 import com.example.Algorithm.Trie;
 import com.example.Dictionary.DictionaryCSV;
 import com.example.Dictionary.DictionaryDatabase;
@@ -16,12 +17,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableCell;
+import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
+import java.io.File;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.binding.Bindings;
-
 import java.util.List;
 
 public class MainController {
@@ -62,6 +67,8 @@ public class MainController {
     @FXML
     private TableView<Word> dictionaryTable2;
     @FXML
+    private TableColumn<Word, Void> actionColumn;
+    @FXML
     private TableColumn<Word, String> wordColumn1;
     @FXML
     private TableColumn<Word, String> wordColumn2;
@@ -88,10 +95,15 @@ public class MainController {
         });
 
         // Initialize TableView columns
+        setupActionColumn(actionColumn);
+        actionColumn.getStyleClass().add("table-cell-center");
+        wordColumn1.getStyleClass().add("table-cell-center");
         wordColumn1.setCellValueFactory(new PropertyValueFactory<>("wordTarget"));
         dictionaryTable1.setItems(wordList);
 
+        wordColumn2.getStyleClass().add("table-cell-center");
         wordColumn2.setCellValueFactory(new PropertyValueFactory<>("wordTarget"));
+        meaningColumn2.getStyleClass().add("table-cell-center");
         meaningColumn2.setCellValueFactory(cellData -> {
             List<String> meanings = cellData.getValue().getWordExplain();
             return new SimpleStringProperty(String.join(", ", meanings));
@@ -372,6 +384,8 @@ public class MainController {
         System.exit(0);
     }
 
+
+
     private void updateSuggestions(String prefix) {
         List<Word> suggestions = trie.getSuggestions(prefix.trim());
         wordList.setAll(suggestions);
@@ -391,4 +405,69 @@ public class MainController {
         }
         dictionaryTable2.setItems(meaningList);
     }
+
+    private void saveSound(String word) {
+        String soundPath = "src/main/resources/audios/" + word + ".mp3";
+        Text2Speech text2speech = new Text2Speech();
+        text2speech.saveAudioToFile(word, "en", soundPath);
+        try {
+            logArea.appendText("Sound have been saved to " + soundPath + "\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void playSound(String word) {
+        File soundPath = new File("src/main/resources/audios/" + word + ".mp3");
+        
+        if (soundPath.exists()) {
+            AudioClip sound = new AudioClip(soundPath.toURI().toString());
+            sound.play();
+            logArea.appendText("Playing sound for: " + word + "\n");
+        } else {
+            System.err.println("Sound file not found: " + soundPath.getAbsolutePath());
+        }
+    }
+    
+
+    private void setupActionColumn(TableColumn<Word, Void> actionColumn) {
+        actionColumn.setCellFactory(param -> new TableCell<Word, Void>() {
+            private final Button button = new Button();
+            private final ImageView imageView;
+    
+            {
+                File imageFile = new File("src/main/resources/icons/audio.png");
+                if (imageFile.exists()) {
+                    Image image = new Image(imageFile.toURI().toString());
+                    imageView = new ImageView(image);
+                    
+                    imageView.setFitHeight(16);
+                    imageView.setFitWidth(16);
+                    button.setGraphic(imageView);
+    
+                    button.setOnAction(event -> {
+                        Word word = getTableRow().getItem();
+                        if (word != null) {
+                            saveSound(word.getWordTarget());
+                            playSound(word.getWordTarget());
+                        }
+                    });
+                } else {
+                    System.err.println("Image file not found: " + imageFile.getAbsolutePath());
+                    imageView = new ImageView();
+                }
+            }
+    
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableRow() == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(button);
+                }
+            }
+        });
+    }
+      
 }

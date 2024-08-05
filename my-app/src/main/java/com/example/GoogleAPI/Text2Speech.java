@@ -15,7 +15,7 @@ public class Text2Speech {
      * @param languageTarget The target language for the TTS conversion (e.g., "en" for English, "vi" for Vietnamese)
      * @throws RuntimeException If an error occurs during the conversion or playing the audio
      */
-    public static void playSoundGoogleTranslate(String text, String languageTarget) throws RuntimeException {
+    public void playSoundGoogleTranslate(String text, String languageTarget) throws RuntimeException {
         try {
             String api =
                     "https://translate.google.com/translate_tts?ie=UTF-8&tl="
@@ -59,7 +59,7 @@ public class Text2Speech {
      * @param language The target language for the TTS conversion (e.g., "en" for English, "vi" for Vietnamese)
      * @param filePath The path to the file where the audio will be saved
      */
-    public static void saveAudioToFile(String text, String language, String filePath) {
+    public void saveAudioToFile(String text, String language, String filePath) {
         try {
             String api =
                     "https://translate.google.com/translate_tts?ie=UTF-8&tl="

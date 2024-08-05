@@ -24,15 +24,18 @@
 .table-view-1 {
     -fx-border-color: #3498db;
     -fx-border-width: 2px;
-    -fx-background-color: #ecf0f1;
     -fx-font-size: 14px;
 }
+
+.table-cell-center {
+    -fx-alignment: CENTER;
+}
+
 
 /* Styles for the second TableView */
 .table-view-2 {
     -fx-border-color: #2ecc71;
     -fx-border-width: 2px;
-    -fx-background-color: #f1c40f;
     -fx-font-size: 14px;
 }
 

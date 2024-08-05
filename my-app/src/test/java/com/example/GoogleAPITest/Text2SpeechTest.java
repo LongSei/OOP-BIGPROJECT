@@ -33,7 +33,8 @@ public class Text2SpeechTest {
         String language = "en";
         String filePath = TEST_FILE_EN;
 
-        Text2Speech.saveAudioToFile(text, language, filePath);
+        Text2Speech tool = new Text2Speech();
+        tool.saveAudioToFile(text, language, filePath);
 
         File file = new File(filePath);
         assertTrue(file.exists(), "The file should exist after saving audio");
@@ -46,7 +47,8 @@ public class Text2SpeechTest {
         String language = "vi";
         String filePath = TEST_FILE_VI;
 
-        Text2Speech.saveAudioToFile(text, language, filePath);
+        Text2Speech tool = new Text2Speech();
+        tool.saveAudioToFile(text, language, filePath);
 
         File file = new File(filePath);
         assertTrue(file.exists(), "The file should exist after saving audio");

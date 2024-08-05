@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.MainController" spacing="10" fx:id="rootVBox">
     <!-- Menu Bar -->
@@ -19,20 +21,20 @@
         </Menu>
     </MenuBar>
 
-    <!-- Dictionary Tables -->
     <HBox spacing="10">
         <!-- First TableView with its unique style -->
-        <TableView fx:id="dictionaryTable1" styleClass="table-view-1" prefWidth="600" prefHeight="200">
+        <TableView fx:id="dictionaryTable1" prefWidth="600" prefHeight="200">
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
             <columns>
                 <TableColumn fx:id="wordColumn1" text="Word"/>
+                <TableColumn fx:id="actionColumn" text="Sound"/>
             </columns>
         </TableView>
 
         <!-- Second TableView with its unique style -->
-        <TableView fx:id="dictionaryTable2" styleClass="table-view-2" prefWidth="600" prefHeight="200">
+        <TableView fx:id="dictionaryTable2" prefWidth="600" prefHeight="200">
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
@@ -42,6 +44,7 @@
             </columns>
         </TableView>
     </HBox>
+
 
     <!-- Main Content -->
     <HBox spacing="10">
