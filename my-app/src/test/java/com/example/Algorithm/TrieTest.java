@@ -42,17 +42,8 @@ public class TrieTest {
     public void testUpdateWordTarget() {
         Trie trie = new Trie();
         trie.insert(trie.root, "old", List.of("previous"));
-    
-        // Print the trie before the update
-        System.out.println("Trie before update:");
-        trie.printAllWords();
-    
         // Update the word from "old" to "new"
         trie.updateWordTarget("old", "new");
-    
-        // Print the trie after the update
-        System.out.println("Trie after update:");
-        trie.printAllWords();
     
         // Check that the old word is not present
         assertFalse(trie.searchWord("old"));

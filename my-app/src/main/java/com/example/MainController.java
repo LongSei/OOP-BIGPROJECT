@@ -3,11 +3,15 @@ package com.example;
 import com.example.Dictionary.Dictionary;
 import com.example.Dictionary.Word;
 import com.example.Algorithm.Trie;
+import com.example.Dictionary.DictionaryCSV;
+import com.example.Dictionary.DictionaryDatabase;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -15,6 +19,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.binding.Bindings;
 
 import java.util.List;
 
@@ -23,6 +29,11 @@ public class MainController {
     private Trie trie = new Trie();
     private ObservableList<Word> wordList = FXCollections.observableArrayList();
     private ObservableList<Word> meaningList = FXCollections.observableArrayList();
+
+    private final double TEXT_FIELD_WIDTH = 0.33;
+    private final double BUTTON_WIDTH = 0.33;
+    @FXML
+    private javafx.scene.layout.VBox rootVBox;
 
     // Main Content
     @FXML
@@ -60,6 +71,23 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        rootVBox.sceneProperty().addListener(new ChangeListener<Scene>() {
+            @Override
+            public void changed(ObservableValue<? extends Scene> observable, Scene oldScene, Scene newScene) {
+                if (newScene != null) {
+                    wordField.prefWidthProperty().bind(Bindings.createDoubleBinding(
+                        () -> newScene.getWidth() * TEXT_FIELD_WIDTH,
+                        newScene.widthProperty()
+                    ));
+                    
+                    meaningField.prefWidthProperty().bind(Bindings.createDoubleBinding(
+                        () -> newScene.getWidth() * TEXT_FIELD_WIDTH,
+                        newScene.widthProperty()
+                    ));
+                }
+            }
+        });
+
         // Initialize TableView columns
         wordColumn1.setCellValueFactory(new PropertyValueFactory<>("wordTarget"));
         dictionaryTable1.setItems(wordList);
@@ -282,6 +310,63 @@ public class MainController {
         } catch (Exception e) {
             logArea.appendText("Error: " + e.getMessage() + "\n");
         }
+    }
+
+    @FXML
+    private void handleOpenDictionaryCSVFile() {
+        try {
+            DictionaryCSV dictionaryCSV = new DictionaryCSV();
+
+            dictionary = new Dictionary();
+            trie = new Trie();
+
+            dictionaryCSV.importData(dictionary);
+            trie.importDictionary(dictionary);
+            refreshTable();
+        } catch (Exception e) {
+            logArea.appendText("Error: " + e.getMessage() + "\n");
+        }
+    }
+
+    @FXML 
+    private void handleSaveDictionaryCSVFile() {
+        try {
+            DictionaryCSV dictionaryCSV = new DictionaryCSV();
+            dictionaryCSV.exportData(dictionary);
+        } catch (Exception e) {
+            logArea.appendText("Error: " + e.getMessage() + "\n");
+        }
+    }
+
+    @FXML
+    private void handleOpenDictionaryDatabase() {
+        try {
+            DictionaryDatabase dictionaryDatabase = new DictionaryDatabase();
+
+            dictionary = new Dictionary();
+            trie = new Trie();
+
+            dictionaryDatabase.importData(dictionary);
+            trie.importDictionary(dictionary);
+            refreshTable();
+        } catch (Exception e) {
+            logArea.appendText("Error: " + e.getMessage() + "\n");
+        }
+    }
+
+    @FXML
+    private void handleSaveDictionaryDatabase() {
+        try {
+            DictionaryDatabase dictionaryDatabase = new DictionaryDatabase();
+            dictionaryDatabase.exportData(dictionary);
+        } catch (Exception e) {
+            logArea.appendText("Error: " + e.getMessage() + "\n");
+        }
+    }
+
+    @FXML
+    private void handleExit() {
+        System.exit(0);
     }
 
     private void updateSuggestions(String prefix) {

@@ -7,7 +7,7 @@
     <!-- Menu Bar -->
     <MenuBar>
         <Menu text="File">
-            <Menu text="Open"/>
+            <Menu text="Open">
                 <MenuItem text="Database File (*.db)" onAction="#handleOpenDictionaryDatabase"/>
                 <MenuItem text="CSV File (*.csv)" onAction="#handleOpenDictionaryCSVFile"/>
             </Menu>

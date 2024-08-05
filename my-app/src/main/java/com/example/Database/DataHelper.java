@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataHelper {
-    private static final String DATABASE_URL = "jdbc:sqlite:src/main/resources/database.db";
+    private static final String DATABASE_URL = "jdbc:sqlite:src/main/resources/data.db";
 
     private static final String CREATE_WORD_TABLE = "CREATE TABLE IF NOT EXISTS Words (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT, " +

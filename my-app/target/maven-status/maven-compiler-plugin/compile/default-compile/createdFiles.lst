@@ -1,9 +1,0 @@
-com/example/Dictionary/DictionaryManagement.class
-com/example/Dictionary/Word.class
-com/example/Database/DataCondition.class
-com/example/GoogleAPI/Text2Speech.class
-com/example/Database/DataHelper.class
-com/example/Dictionary/DictionaryCommandLine.class
-com/example/GoogleAPI/APITranslator.class
-com/example/Dictionary/Dictionary.class
-com/example/Dictionary/DictionaryDatabase.class

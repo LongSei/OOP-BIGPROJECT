@@ -58,7 +58,7 @@ class DictionaryCSVTest {
     @Test
     void testExportData() {
         Dictionary dictionary = new Dictionary();
-        dictionary.addWord(new Word("word1", List.of("meaning1")));
+        dictionary.addWord(new Word("word1", List.of("meaning1", "meaning3")));
         dictionary.addWord(new Word("word2", List.of("meaning2")));
 
         dictionaryCSV.exportData(dictionary);
@@ -71,6 +71,10 @@ class DictionaryCSVTest {
 
             line = reader.readLine();
             assertNotNull(line, "File should have a second line");
+            assertEquals("word1,meaning3", line, "Second line should match 'word1,meaning3'");
+
+            line = reader.readLine();
+            assertNotNull(line, "File should have a third line");
             assertEquals("word2,meaning2", line, "Second line should match 'word2,meaning2'");
         } catch (IOException e) {
             fail("IOException should not occur while reading the file");
