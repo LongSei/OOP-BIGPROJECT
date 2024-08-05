@@ -64,7 +64,7 @@ $ git clone https://github.com/LongSei/OOP-BIGPROJECT.git
 
 2. **Navigate to the Project Directory**: 
 ```bash
-$ cd OOP-BIGPROJECT
+$ cd OOP-BIGPROJECT/my-app
 ```
 
 3. **Build Project using Maven**: 
