@@ -11,6 +11,12 @@ import java.util.List;
 public class DictionaryCSV extends DictionaryManagement {
     private final File file = new File("src/main/resources/data.csv");
 
+    /**
+     * Import data from a CSV file.
+     * The CSV file should have 2 columns: Word and Meaning.
+     * Each row should have a word and its meaning separated by a comma.
+     * @param dictionary The dictionary to import data to.
+     */
     @Override
     public void importData(Dictionary dictionary) {
         if (!file.exists()) {
@@ -35,6 +41,12 @@ public class DictionaryCSV extends DictionaryManagement {
         }
     }
 
+    /**
+     * Export data to a CSV file.
+     * The CSV file will have 2 columns: Word and Meaning.
+     * Each row will have a word and its meaning separated by a comma.
+     * @param dictionary The dictionary to export data from.
+     */
     @Override
     public void exportData(Dictionary dictionary) {
         List<List<String>> data = new ArrayList<>();

@@ -75,6 +75,9 @@ public class MainController {
     @FXML
     private TableColumn<Word, String> meaningColumn2;
 
+    /**
+     * Initializes the controller class.
+     */
     @FXML
     private void initialize() {
         rootVBox.sceneProperty().addListener(new ChangeListener<Scene>() {
@@ -145,6 +148,9 @@ public class MainController {
         });
     }
 
+    /**
+     * Handle the Add Word button.
+     */
     @FXML
     private void handleAddWord() {
         try {
@@ -174,6 +180,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Handle the Find Word button.
+     */
     @FXML
     private void handleFindWord() {
         String word = wordField.getText().trim();
@@ -197,6 +206,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Handle the Delete Word button.
+     */
     @FXML
     private void handleDeleteWord() {
         String word = wordField.getText().trim();
@@ -264,6 +276,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Handle the Update Word button.
+     */
     @FXML
     private void handleUpdateWord() {
         if (selectedWord.isEmpty()) {
@@ -323,6 +338,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Handle the Open Dictionary CSV File button.
+     */
     @FXML
     private void handleOpenDictionaryCSVFile() {
         try {
@@ -340,6 +358,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Handle the Save Dictionary CSV File button.
+     */
     @FXML 
     private void handleSaveDictionaryCSVFile() {
         try {
@@ -351,6 +372,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Handle the Open Dictionary Database button.
+     */
     @FXML
     private void handleOpenDictionaryDatabase() {
         try {
@@ -368,6 +392,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Handle the Save Dictionary Database button.
+     */
     @FXML
     private void handleSaveDictionaryDatabase() {
         try {
@@ -379,13 +406,18 @@ public class MainController {
         }
     }
 
+    /**
+     * Handle the Exit button.
+     */
     @FXML
     private void handleExit() {
         System.exit(0);
     }
 
-
-
+    /**
+     * Update the suggestions list based on the prefix.
+     * @param prefix    the prefix
+     */
     private void updateSuggestions(String prefix) {
         List<Word> suggestions = trie.getSuggestions(prefix.trim());
         wordList.setAll(suggestions);
@@ -406,6 +438,10 @@ public class MainController {
         dictionaryTable2.setItems(meaningList);
     }
 
+    /**
+     * Save the sound of the word to a file.
+     * @param word  the word
+     */
     private void saveSound(String word) {
         String soundPath = "src/main/resources/audios/" + word + ".mp3";
         Text2Speech text2speech = new Text2Speech();
@@ -417,6 +453,10 @@ public class MainController {
         }
     }
 
+    /**
+     * Play the sound of the word.
+     * @param word  the word
+     */
     private void playSound(String word) {
         File soundPath = new File("src/main/resources/audios/" + word + ".mp3");
         
@@ -430,6 +470,10 @@ public class MainController {
     }
     
 
+    /**
+     * Setup the action column for the table.
+     * @param actionColumn  the action column
+     */
     private void setupActionColumn(TableColumn<Word, Void> actionColumn) {
         actionColumn.setCellFactory(param -> new TableCell<Word, Void>() {
             private final Button button = new Button();
