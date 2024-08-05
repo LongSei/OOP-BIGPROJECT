@@ -31,7 +31,6 @@ public class MainController {
     private ObservableList<Word> meaningList = FXCollections.observableArrayList();
 
     private final double TEXT_FIELD_WIDTH = 0.33;
-    private final double BUTTON_WIDTH = 0.33;
     @FXML
     private javafx.scene.layout.VBox rootVBox;
 
@@ -323,6 +322,7 @@ public class MainController {
             dictionaryCSV.importData(dictionary);
             trie.importDictionary(dictionary);
             refreshTable();
+            logArea.appendText("Dictionary loaded from CSV file.\n");
         } catch (Exception e) {
             logArea.appendText("Error: " + e.getMessage() + "\n");
         }
@@ -333,6 +333,7 @@ public class MainController {
         try {
             DictionaryCSV dictionaryCSV = new DictionaryCSV();
             dictionaryCSV.exportData(dictionary);
+            logArea.appendText("Dictionary saved to CSV file.\n");
         } catch (Exception e) {
             logArea.appendText("Error: " + e.getMessage() + "\n");
         }
@@ -349,6 +350,7 @@ public class MainController {
             dictionaryDatabase.importData(dictionary);
             trie.importDictionary(dictionary);
             refreshTable();
+            logArea.appendText("Dictionary loaded from Database.\n");
         } catch (Exception e) {
             logArea.appendText("Error: " + e.getMessage() + "\n");
         }
@@ -359,6 +361,7 @@ public class MainController {
         try {
             DictionaryDatabase dictionaryDatabase = new DictionaryDatabase();
             dictionaryDatabase.exportData(dictionary);
+            logArea.appendText("Dictionary saved to Database.\n");
         } catch (Exception e) {
             logArea.appendText("Error: " + e.getMessage() + "\n");
         }

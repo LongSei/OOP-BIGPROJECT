@@ -68,6 +68,20 @@ public class DataHelper {
     }
 
     /**
+     * Drop the tables in the database.
+     * @param table The name of the table
+     */
+    public void dropTable(String table) {
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute("DROP TABLE IF EXISTS " + table);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error in dropping table: " + e.getMessage());
+        }
+    }
+
+    /**
      * Insert data into the table.
      *
      * @param table   The name of the table
@@ -80,36 +94,38 @@ public class DataHelper {
             throw new IllegalArgumentException("Columns and values size mismatch");
         }
 
-        String sqlSearchData = "";
-        boolean isExists = false;
+        StringBuilder sqlSearchData = new StringBuilder();
         for (int i = 0; i < columns.size(); i++) {
-            if (i == columns.size() - 1) {
-                sqlSearchData += columns.get(i) + " = '" + values.get(i) + "'";
-            } else {
-                sqlSearchData += columns.get(i) + " = '" + values.get(i) + "' AND ";
+            sqlSearchData.append(columns.get(i)).append(" = ?");
+            if (i < columns.size() - 1) {
+                sqlSearchData.append(" AND ");
             }
         }
         String sqlCheckData = "SELECT * FROM " + table + " WHERE " + sqlSearchData;
+
         try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sqlCheckData)) {
-            if (rs.next()) {
-                isExists = true;
+             PreparedStatement pstmtCheck = conn.prepareStatement(sqlCheckData)) {
+            for (int i = 0; i < values.size(); i++) {
+                pstmtCheck.setString(i + 1, values.get(i));
+            }
+            try (ResultSet rs = pstmtCheck.executeQuery()) {
+                if (rs.next()) {
+                    return;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error in checking data in the table: " + e.getMessage());
         }
 
-        if (isExists) {
-            return;
-        }
-
-        String sql = "INSERT INTO " + table + " (" + String.join(", ", columns) + ") VALUES ('" + String.join("', '", values) + "')";
+        String sql = "INSERT INTO " + table + " (" + String.join(", ", columns) + ") VALUES (" + String.join(", ", values.stream().map(v -> "?").toArray(String[]::new)) + ")";
 
         try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(sql);
+             PreparedStatement pstmtInsert = conn.prepareStatement(sql)) {
+            for (int i = 0; i < values.size(); i++) {
+                pstmtInsert.setString(i + 1, values.get(i));
+            }
+            pstmtInsert.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Error in inserting data into the table: " + e.getMessage() + "\nSQL: " + sql);
@@ -306,7 +322,7 @@ public class DataHelper {
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
-            List<String> columns = new ArrayList<String>();
+            List<String> columns = new ArrayList<>();
             while (rs.next()) {
                 columns.add(rs.getString("name"));
             }

@@ -12,17 +12,21 @@ public class DictionaryDatabase extends DictionaryManagement {
      */
     @Override
     public void importData(Dictionary dictionary) {
-        DataHelper dataHelper = new DataHelper();
-        List<List<String>> data = dataHelper.queryData("Words", null);
-        for (List<String> row : data) {
-            String word_target = row.get(1);
-            String word_explain = row.get(2);
+        try {
+            DataHelper dataHelper = new DataHelper();
+            List<List<String>> data = dataHelper.queryData("Words", null);
+            for (List<String> row : data) {
+                String word_target = row.get(1);
+                String word_explain = row.get(2);
 
-            List<String> word_explain_list = new ArrayList<>();
-            word_explain_list.add(word_explain);
+                List<String> word_explain_list = new ArrayList<>();
+                word_explain_list.add(word_explain);
 
-            Word word = new Word(word_target, word_explain_list);
-            dictionary.addWord(word);
+                Word word = new Word(word_target, word_explain_list);
+                dictionary.addWord(word);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     };
 
@@ -33,22 +37,28 @@ public class DictionaryDatabase extends DictionaryManagement {
      */
     @Override
     public void exportData(Dictionary dictionary) {
-        DataHelper dataHelper = new DataHelper();
-        dataHelper.clearTable("Words");
+        try {
+            DataHelper dataHelper = new DataHelper();
+            dataHelper.dropTable("Words");
+            dataHelper.createTable();
+            dataHelper.clearTable("Words");
 
-        for (Word word : dictionary.getAllWords()) {
-            for (String word_explain : word.getWordExplain()) {
-                List<String> colums = new ArrayList<>();
-                List<String> values = new ArrayList<>();
+            for (Word word : dictionary.getAllWords()) {
+                for (String word_explain : word.getWordExplain()) {
+                    List<String> colums = new ArrayList<>();
+                    List<String> values = new ArrayList<>();
 
-                colums.add("word_target");
-                colums.add("word_explain");
+                    colums.add("word_target");
+                    colums.add("word_explain");
 
-                values.add(word.getWordTarget());
-                values.add(word_explain);
+                    values.add(word.getWordTarget());
+                    values.add(word_explain);
 
-                dataHelper.insertData("Words", colums, values);
+                    dataHelper.insertData("Words", colums, values);
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     };
 }
