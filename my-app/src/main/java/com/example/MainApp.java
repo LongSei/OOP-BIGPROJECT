@@ -20,7 +20,7 @@ public class MainApp extends Application {
         String cssPath = "./src/main/resources/styles.css";
         scene.getStylesheets().add(Paths.get(cssPath).toUri().toURL().toExternalForm());
 
-        primaryStage.setTitle("JavaFX Application");
+        primaryStage.setTitle("English Learning Application");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
