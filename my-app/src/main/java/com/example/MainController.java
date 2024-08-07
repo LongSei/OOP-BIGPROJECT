@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.Dictionary.Dictionary;
 import com.example.Dictionary.Word;
+import com.example.GoogleAPI.APITranslator;
 import com.example.GoogleAPI.Text2Speech;
 import com.example.Algorithm.Trie;
 import com.example.Dictionary.DictionaryCSV;
@@ -28,6 +29,8 @@ import javafx.scene.image.Image;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.binding.Bindings;
 import java.util.List;
+
+import org.apiguardian.api.API;
 
 public class MainController {
     private Dictionary dictionary = new Dictionary();
@@ -154,12 +157,16 @@ public class MainController {
     @FXML
     private void handleAddWord() {
         try {
-            String word = wordField.getText().trim();
-            String definition = meaningField.getText().trim();
+            String word = wordField.getText().trim().toLowerCase();
+            String definition = meaningField.getText().trim().toLowerCase();
 
-            if (word.isEmpty() || definition.isEmpty()) {
-                logArea.appendText("Error: Word or definition cannot be empty.\n");
+            if (word.isEmpty()) {
+                // logArea.appendText("Error: Word or definition cannot be empty.\n");
                 return;
+            }
+
+            if (definition.isEmpty()) {
+                definition = APITranslator.translate("en", "vi", word);
             }
 
             Word newWord = new Word(word, List.of(definition));
@@ -171,12 +178,8 @@ public class MainController {
             wordField.clear();
             meaningField.clear();
 
-            for (Word w : dictionary.getAllWords()) {
-                logArea.appendText(w.getWordTarget() + " " + w.getWordExplain() + "\n");
-            }
-
         } catch (Exception e) {
-            logArea.appendText("Error: " + e.getMessage() + "\n");
+            // logArea.appendText("Error: " + e.getMessage() + "\n");
         }
     }
 
@@ -187,7 +190,7 @@ public class MainController {
     private void handleFindWord() {
         String word = wordField.getText().trim();
         if (word.isEmpty()) {
-            logArea.appendText("Error: Word field is empty.\n");
+            // logArea.appendText("Error: Word field is empty.\n");
             return;
         }
 
@@ -214,7 +217,7 @@ public class MainController {
         String word = wordField.getText().trim();
         String definition = meaningField.getText().trim();
         if (word.isEmpty()) {
-            logArea.appendText("Error: Word field is empty.\n");
+            // logArea.appendText("Error: Word field is empty.\n");
             return;
         }
 
@@ -236,7 +239,7 @@ public class MainController {
                 refreshTable();
                 logArea.appendText("Deleted all entries for Word: " + word + "\n");
             } catch (Exception e) {
-                logArea.appendText("Error: " + e.getMessage() + "\n");
+                // logArea.appendText("Error: " + e.getMessage() + "\n");
             }
 
         } else {
@@ -265,13 +268,13 @@ public class MainController {
                         refreshTable();
                         logArea.appendText("Deleted Meaning: " + definition + " from Word: " + word + "\n");
                     } else {
-                        logArea.appendText("Error: Definition not found for Word: " + word + "\n");
+                        // logArea.appendText("Error: Definition not found for Word: " + word + "\n");
                     }
                 } else {
                     logArea.appendText("Word not found: " + word + "\n");
                 }
             } catch (Exception e) {
-                logArea.appendText("Error: " + e.getMessage() + "\n");
+                // logArea.appendText("Error: " + e.getMessage() + "\n");
             }
         }
     }
@@ -282,21 +285,21 @@ public class MainController {
     @FXML
     private void handleUpdateWord() {
         if (selectedWord.isEmpty()) {
-            logArea.appendText("Error: Word field is empty.\n");
+            // logArea.appendText("Error: Word field is empty.\n");
             return;
         }
         if (selectedMeaning.isEmpty()) {
-            logArea.appendText("Error: Meaning field is empty.\n");
+            // logArea.appendText("Error: Meaning field is empty.\n");
             return;
         }
 
         if (dictionary.getWordByTarget(selectedWord.trim()) == null) {
-            logArea.appendText("Error: Word not exists.\n");
+            // logArea.appendText("Error: Word not exists.\n");
             return;
         }
 
         if (dictionary.getWordByTarget(selectedWord).getWordExplain().contains(selectedMeaning) == false) {
-            logArea.appendText("Error: Meaning not exists.\n");
+            // logArea.appendText("Error: Meaning not exists.\n");
             return;
         }
 
@@ -304,12 +307,12 @@ public class MainController {
         String newMeaning = meaningField.getText().trim();
 
         if (newWord.isEmpty()) {
-            logArea.appendText("Error: New Word cannot be empty.\n");
+            // logArea.appendText("Error: New Word cannot be empty.\n");
             return;
         }
 
         if (newMeaning.isEmpty()) {
-            logArea.appendText("Error: New Meaning cannot be empty.\n");
+            // logArea.appendText("Error: New Meaning cannot be empty.\n");
             return;
         }
 
@@ -334,7 +337,7 @@ public class MainController {
                 logArea.appendText("Word not found: " + selectedWord + "\n");
             }
         } catch (Exception e) {
-            logArea.appendText("Error: " + e.getMessage() + "\n");
+            // logArea.appendText("Error: " + e.getMessage() + "\n");
         }
     }
 
@@ -354,7 +357,7 @@ public class MainController {
             refreshTable();
             logArea.appendText("Dictionary loaded from CSV file.\n");
         } catch (Exception e) {
-            logArea.appendText("Error: " + e.getMessage() + "\n");
+            // logArea.appendText("Error: " + e.getMessage() + "\n");
         }
     }
 
@@ -368,7 +371,7 @@ public class MainController {
             dictionaryCSV.exportData(dictionary);
             logArea.appendText("Dictionary saved to CSV file.\n");
         } catch (Exception e) {
-            logArea.appendText("Error: " + e.getMessage() + "\n");
+            // logArea.appendText("Error: " + e.getMessage() + "\n");
         }
     }
 
@@ -388,7 +391,7 @@ public class MainController {
             refreshTable();
             logArea.appendText("Dictionary loaded from Database.\n");
         } catch (Exception e) {
-            logArea.appendText("Error: " + e.getMessage() + "\n");
+            // logArea.appendText("Error: " + e.getMessage() + "\n");
         }
     }
 
@@ -402,7 +405,7 @@ public class MainController {
             dictionaryDatabase.exportData(dictionary);
             logArea.appendText("Dictionary saved to Database.\n");
         } catch (Exception e) {
-            logArea.appendText("Error: " + e.getMessage() + "\n");
+            // logArea.appendText("Error: " + e.getMessage() + "\n");
         }
     }
 

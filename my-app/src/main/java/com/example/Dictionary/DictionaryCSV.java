@@ -29,8 +29,8 @@ public class DictionaryCSV extends DictionaryManagement {
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
                 if (values.length == 2) {
-                    String word = values[0];
-                    List<String> meaning = List.of(values[1]);
+                    String word = values[0].toLowerCase();
+                    List<String> meaning = List.of(values[1].toLowerCase());
                     dictionary.addWord(new Word(word, meaning));
                 } else {
                     System.err.println("Skipping invalid line: " + line);
@@ -53,8 +53,8 @@ public class DictionaryCSV extends DictionaryManagement {
         for (Word word : dictionary.getAllWords()) {
             for (String word_explain : word.getWordExplain()) {
                 List<String> row = new ArrayList<>();
-                row.add(word.getWordTarget());
-                row.add(word_explain);
+                row.add(word.getWordTarget().toLowerCase());
+                row.add(word_explain.toLowerCase());
                 data.add(row);
             }
         }

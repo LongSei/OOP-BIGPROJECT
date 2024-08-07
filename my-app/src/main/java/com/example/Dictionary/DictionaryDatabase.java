@@ -16,8 +16,8 @@ public class DictionaryDatabase extends DictionaryManagement {
             DataHelper dataHelper = new DataHelper();
             List<List<String>> data = dataHelper.queryData("Words", null);
             for (List<String> row : data) {
-                String word_target = row.get(1);
-                String word_explain = row.get(2);
+                String word_target = row.get(1).toLowerCase();
+                String word_explain = row.get(2).toLowerCase();
 
                 List<String> word_explain_list = new ArrayList<>();
                 word_explain_list.add(word_explain);
@@ -51,8 +51,8 @@ public class DictionaryDatabase extends DictionaryManagement {
                     colums.add("word_target");
                     colums.add("word_explain");
 
-                    values.add(word.getWordTarget());
-                    values.add(word_explain);
+                    values.add(word.getWordTarget().toLowerCase());
+                    values.add(word_explain.toLowerCase());
 
                     dataHelper.insertData("Words", colums, values);
                 }
