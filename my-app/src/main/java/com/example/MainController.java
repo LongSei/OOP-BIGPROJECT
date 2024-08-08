@@ -160,12 +160,16 @@ public class MainController {
             String word = wordField.getText().trim().toLowerCase();
             String definition = meaningField.getText().trim().toLowerCase();
 
-            if (word.isEmpty()) {
-                // logArea.appendText("Error: Word or definition cannot be empty.\n");
+            if (word.isEmpty() && definition.isEmpty()) {
+                // logArea.appendText("Error: Word and Definition fields are empty.\n");
                 return;
             }
 
-            if (definition.isEmpty()) {
+            if (word.isEmpty() && definition.isEmpty() == false) {
+                word = APITranslator.translate("vi", "en", definition);
+            }
+
+            if (word.isEmpty() == false && definition.isEmpty()) {
                 definition = APITranslator.translate("en", "vi", word);
             }
 
